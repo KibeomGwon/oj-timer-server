@@ -33,7 +33,7 @@ class SubmissionRepositoryTest {
     @Test
     public void saveTest() throws Exception {
         // given
-        Problem problem = Problem.create("baekjoon_1004", "Gold V", "baekjoon");
+        Problem problem = Problem.create("baekjoon_1004", "Gold V", "baekjoon", "link");
         Submission submission1 = Submission.create("111111", LocalDateTime.of(2025, 1, 5, 21, 9), "user1", problem);
         Submission submission2 = Submission.create("222222", LocalDateTime.of(2025, 1, 5, 21, 10), "user1", problem);
         Submission submission3 = Submission.create("333333", LocalDateTime.of(2025, 1, 5, 21, 11), "user1", problem);
@@ -48,11 +48,11 @@ class SubmissionRepositoryTest {
         // when
 
         Submission findSubmission = em
-                .createQuery("select s from Submission s join Problem p on s.problem = p where p.site =: site order by s.time desc limit 1", Submission.class)
+                .createQuery("select s from Submission s join Problem p on s.problem = p where p.site =: site order by s.submissionTime desc limit 1", Submission.class)
                 .setParameter("site", "baekjoon")
                 .getSingleResult();
         // then
-        assertThat(findSubmission.getElement_id()).isEqualTo("333333");
+        assertThat(findSubmission.getElementId()).isEqualTo("333333");
         assertThat(findSubmission.getProblem().getProblemTitle()).isEqualTo("baekjoon_1004");
     }
 }

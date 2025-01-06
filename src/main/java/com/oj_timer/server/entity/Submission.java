@@ -17,18 +17,18 @@ public class Submission extends EntityDate {
     @Column(name = "submission_id")
     private Long id;
     @Column(name = "element_id", unique = true)
-    private String element_id;
+    private String elementId;
     @Column(name = "submission_time")
-    private LocalDateTime time;
+    private LocalDateTime submissionTime;
     private String username;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
-    private Submission(String element_id, LocalDateTime time, String username) {
-        this.element_id = element_id;
-        this.time = time;
+    private Submission(String elementId, LocalDateTime submissionTime, String username) {
+        this.elementId = elementId;
+        this.submissionTime = submissionTime;
         this.username = username;
     }
 
@@ -39,8 +39,8 @@ public class Submission extends EntityDate {
     }
 
     // === ddd === //
-    public static Submission create(String element_id, LocalDateTime time, String username, Problem problem) {
-        Submission submission = new Submission(element_id, time, username);
+    public static Submission create(String elementId, LocalDateTime submissionTime, String username, Problem problem) {
+        Submission submission = new Submission(elementId, submissionTime, username);
         submission.bindingProblem(problem);
         return submission;
     }

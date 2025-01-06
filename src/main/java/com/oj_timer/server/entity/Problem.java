@@ -21,18 +21,20 @@ public class Problem extends EntityDate {
     private String problemTitle;
     private String level;
     private String site;
+    private String link;
 
     @OneToMany(mappedBy = "problem")
     private List<Submission> submissions = new ArrayList<>();
 
-    public Problem(String problemTitle, String level, String site) {
+    public Problem(String problemTitle, String level, String site, String link) {
         this.problemTitle = problemTitle;
         this.level = level;
         this.site = site;
+        this.link = link;
     }
 
     // === ddd === //
-    public static Problem create(String problemTitle, String level, String site) {
-         return new Problem(problemTitle, level, site);
+    public static Problem create(String problemTitle, String level, String site, String link) {
+         return new Problem(problemTitle, level, site, link);
     }
 }
