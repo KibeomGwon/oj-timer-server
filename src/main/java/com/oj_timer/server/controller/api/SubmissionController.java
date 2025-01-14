@@ -1,12 +1,12 @@
 package com.oj_timer.server.controller.api;
 
-import com.oj_timer.server.controller.api.http_util.Response;
-import com.oj_timer.server.dto.BaekjoonSubmissionDto;
+import com.oj_timer.server.dto.InputSubmissionDto;
 import com.oj_timer.server.dto.SubmissionDto;
 import com.oj_timer.server.service.SubmissionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,16 +25,18 @@ public class SubmissionController {
      * @return Response<Boolean>()
      */
     @GetMapping("/{elementId}")
-    public Response<String> checkExists(@PathVariable String elementId, @RequestParam String username, @RequestParam String site) {
+    public ResponseEntity<String> checkExists(@PathVariable String elementId, @RequestParam String username, @RequestParam String site) {
         log.info("SubmissionController.checkExists");
         submissionService.isExistsSubmissionByElementId(elementId, username, site);
-        return new Response<String>(HttpStatus.OK, "exists", HttpStatus.OK.value());
+        return new ResponseEntity<String>("exists", HttpStatus.OK);
     }
 
     @PostMapping
-    public Response<SubmissionDto> createSubmission(@RequestBody BaekjoonSubmissionDto dto) {
+    public ResponseEntity<SubmissionDto> createSubmission(@RequestBody InputSubmissionDto dto) {
         log.info("SubmissionController.createSubmission");
+        System.out.println(dto.toString());
+
         SubmissionDto savedDto = submissionService.save(dto);
-        return new Response<>(HttpStatus.CREATED, savedDto, HttpStatus.CREATED.value());
+        return new ResponseEntity<>(savedDto, HttpStatus.CREATED);
     }
 }

@@ -17,7 +17,7 @@ public class ProblemService {
         Problem savedProblem = problemRepository.save(problem);
 
         return ProblemDto.builder()
-                .problemTitle(savedProblem.getProblemTitle())
+                .problemTitleId(savedProblem.getProblemTitleId())
                 .level(savedProblem.getLevel())
                 .site(savedProblem.getSite())
                 .link(savedProblem.getLink())

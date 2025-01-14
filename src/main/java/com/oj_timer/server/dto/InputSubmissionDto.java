@@ -7,7 +7,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class BaekjoonSubmissionDto implements BaseSubmitDto {
+public class InputSubmissionDto {
 
     private String elementId;
     private String language;
@@ -17,14 +17,14 @@ public class BaekjoonSubmissionDto implements BaseSubmitDto {
     private String level;
     private String link;
     private String site;
+    private String title;
 
-    @Override
+
     public Problem toProblem() {
-        Problem problem = Problem.create(site + problemId, level, site, link);
+        Problem problem = Problem.create(problemId, level, site, link, title);
         return problem;
     }
 
-    @Override
     public Submission toSubmission(Problem problem) {
         Submission submission = Submission.create(elementId, submissionTime, username, problem);
         return submission;

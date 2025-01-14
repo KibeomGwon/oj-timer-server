@@ -1,10 +1,10 @@
 package com.oj_timer.server.exception_handler;
 
-import com.oj_timer.server.controller.api.http_util.ErrorResponse;
 import com.oj_timer.server.exception_handler.exceptions.BadRequestException;
 import com.oj_timer.server.exception_handler.exceptions.ForbiddenException;
 import com.oj_timer.server.exception_handler.exceptions.NotFoundException;
 import com.oj_timer.server.exception_handler.exceptions.UnauthorizedException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -12,22 +12,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class RestExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
-    public ErrorResponse illegalAccessException(BadRequestException e) {
-        return new ErrorResponse(e.getStatus(), e.getMessage(), e.getCode());
+    public ResponseEntity<String> illegalAccessException(BadRequestException e) {
+        return new ResponseEntity<String>(e.getMessage(), e.getStatus());
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ErrorResponse notFoundException(NotFoundException e) {
-        return new ErrorResponse(e.getStatus(), e.getMessage(), e.getCode());
+    public ResponseEntity<String> notFoundException(NotFoundException e) {
+        return new ResponseEntity<String>(e.getMessage(), e.getStatus());
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    public ErrorResponse forbiddenException(ForbiddenException e) {
-        return new ErrorResponse(e.getStatus(), e.getMessage(), e.getCode());
+    public ResponseEntity<String> forbiddenException(ForbiddenException e) {
+        return new ResponseEntity<String>(e.getMessage(), e.getStatus());
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ErrorResponse unauthorizedException(UnauthorizedException e) {
-        return new ErrorResponse(e.getStatus(), e.getMessage(), e.getCode());
+    public ResponseEntity<String> unauthorizedException(UnauthorizedException e) {
+        return new ResponseEntity<String>(e.getMessage(), e.getStatus());
     }
 }

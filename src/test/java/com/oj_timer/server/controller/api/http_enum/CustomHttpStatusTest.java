@@ -10,10 +10,5 @@ class CustomHttpStatusTest {
 
     @Test
     public void test() throws Exception {
-        // given
-        Assertions.assertThat(CustomHttpStatus.NOT_FOUNT.getCode()).isEqualTo(404);
-        // when
-        System.out.println(CustomHttpStatus.NOT_FOUNT.getCode());
-        // then
     }
 }

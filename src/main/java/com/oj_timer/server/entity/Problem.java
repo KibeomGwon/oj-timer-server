@@ -17,24 +17,26 @@ public class Problem extends EntityDate {
     @GeneratedValue
     @Column(name = "problem_id")
     private Long id;
-    @Column(name = "problem_title", unique = true)
-    private String problemTitle;
+    @Column(name = "problem_title_id", unique = true)
+    private String problemTitleId;
     private String level;
     private String site;
     private String link;
+    private String title;
 
     @OneToMany(mappedBy = "problem")
     private List<Submission> submissions = new ArrayList<>();
 
-    public Problem(String problemTitle, String level, String site, String link) {
-        this.problemTitle = problemTitle;
+    public Problem(String problemTitleId, String level, String site, String link, String title) {
+        this.problemTitleId = problemTitleId;
         this.level = level;
         this.site = site;
         this.link = link;
+        this.title = title;
     }
 
     // === ddd === //
-    public static Problem create(String problemTitle, String level, String site, String link) {
-         return new Problem(problemTitle, level, site, link);
+    public static Problem create(String problemTitleId, String level, String site, String link, String title) {
+         return new Problem(problemTitleId, level, site, link, title);
     }
 }
