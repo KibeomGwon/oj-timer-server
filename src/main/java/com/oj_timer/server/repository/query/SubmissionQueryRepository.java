@@ -9,12 +9,15 @@ import com.oj_timer.server.entity.Submission;
 import com.querydsl.core.QueryFactory;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.SubQueryExpression;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +28,7 @@ import java.util.List;
 
 import static com.oj_timer.server.entity.QProblem.*;
 import static com.oj_timer.server.entity.QSubmission.*;
+import static io.micrometer.common.util.StringUtils.*;
 
 @Repository
 public class SubmissionQueryRepository {
@@ -49,10 +53,11 @@ public class SubmissionQueryRepository {
                 .from(submission)
                 .join(submission.problem, problem)
                 .where(
-                        problem.site.contains(condition.getSite()),
-                        submission.username.eq(condition.getUsername()),
+                        siteEq(condition.getSite()),
+                        usernameEq(condition.getUsername()),
                         submission.submissionTime.eq(where)
                 )
+                .orderBy(submission.submissionTime.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -62,7 +67,15 @@ public class SubmissionQueryRepository {
         return new PageImpl<>(fetched, pageable, count);
     }
 
-    private static QRecentSubmissionDto getSubmissionDto() {
+    private BooleanExpression siteEq(String site) {
+        return isEmpty(site) ? null : problem.site.contains(site);
+    }
+
+    private BooleanExpression usernameEq(String username) {
+        return isEmpty(username) ? null : submission.username.eq(username);
+    }
+
+    private QRecentSubmissionDto getSubmissionDto() {
         return new QRecentSubmissionDto(
                 submission.username,
                 submission.elementId,

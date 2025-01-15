@@ -16,4 +16,14 @@ public class ProblemDto {
     public Problem toEntity() {
         return Problem.create(problemTitleId, level, site, link, title);
     }
+
+    public static ProblemDto toDto(Problem problem) {
+        return ProblemDto.builder().
+                problemTitleId(problem.getProblemTitleId())
+                .level(problem.getLevel())
+                .site(problem.getSite())
+                .link(problem.getLink())
+                .title(problem.getTitle())
+                .build();
+    }
 }

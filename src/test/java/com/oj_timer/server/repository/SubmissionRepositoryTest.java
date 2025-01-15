@@ -1,6 +1,7 @@
 package com.oj_timer.server.repository;
 
 import com.oj_timer.server.AppConfig;
+import com.oj_timer.server.dto.SubmissionDto;
 import com.oj_timer.server.entity.Problem;
 import com.oj_timer.server.entity.Submission;
 import jakarta.persistence.EntityManager;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -54,5 +57,18 @@ class SubmissionRepositoryTest {
         // then
         assertThat(findSubmission.getElementId()).isEqualTo("333333");
         assertThat(findSubmission.getProblem().getProblemTitleId()).isEqualTo("baekjoon_1004");
+    }
+
+    @Test
+    public void fetchTest() throws Exception {
+        // given
+        // when
+        Page<SubmissionDto> result = submissionRepository.findAllByProblemTitleIdAndUsername("baekjoon1005", "rrq0211", PageRequest.of(0, 20));
+
+        // then
+        Assertions.assertThat(result.getTotalElements()).isEqualTo(2);
+        for (SubmissionDto dto : result) {
+            System.out.println(dto.toString());
+        }
     }
 }

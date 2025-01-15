@@ -1,8 +1,6 @@
 package com.oj_timer.server.service;
 
-import com.oj_timer.server.dto.InputSubmissionDto;
-import com.oj_timer.server.dto.RecentSubmissionDto;
-import com.oj_timer.server.dto.SubmissionDto;
+import com.oj_timer.server.dto.*;
 import com.oj_timer.server.dto.condition.SubmissionSearchCondition;
 import com.oj_timer.server.exception_handler.exceptions.BadRequestException;
 import com.oj_timer.server.entity.Problem;
@@ -38,7 +36,7 @@ public class SubmissionService {
 
         Submission savedSubmission = submissionRepository.save(dto.toSubmission(problem));
 
-        return getSubmissionDto(savedSubmission);
+        return SubmissionDto.toDto(savedSubmission);
     }
 
     public void isExistsSubmissionByElementId(String elementId, String username, String site) throws NotFoundException {
@@ -47,23 +45,22 @@ public class SubmissionService {
     }
 
     public Page<RecentSubmissionDto> getRecentSubmissionsPaging(SubmissionSearchCondition condition, Pageable pageable) {
+        Page<RecentSubmissionDto> page = submissionQueryRepository.findRecentSubmissionPage(condition, pageable);
         return submissionQueryRepository.findRecentSubmissionPage(condition, pageable);
     }
 
+    public ProblemAndSubmissionsDto findSinglePageByProblemTitleIdAndUsername(String problemTitleId, String username, Pageable pageable) {
+        Problem problem = problemRepository
+                .findProblemByProblemTitleId(problemTitleId).orElseThrow(() -> new NotFoundException("문제를 찾지 못했습니다." + problemTitleId));
+        Page<SubmissionDto> submissionDtos = submissionRepository.findAllByProblemTitleIdAndUsername(problemTitleId, username, pageable);
+        return ProblemAndSubmissionsDto.create(ProblemDto.toDto(problem), submissionDtos);
+    }
+
+
+    // === private method === //
 
     private boolean isExistsProblem(String problemTitle) {
         return problemRepository.findProblemByProblemTitleId(problemTitle).isPresent();
     }
 
-    private SubmissionDto getSubmissionDto(Submission savedSubmission) {
-        return SubmissionDto.builder()
-                .elementId(savedSubmission.getElementId())
-                .submissionTime(savedSubmission.getSubmissionTime())
-                .username(savedSubmission.getUsername())
-                .problemTitle(savedSubmission.getProblem().getProblemTitleId())
-                .site(savedSubmission.getProblem().getSite())
-                .level(savedSubmission.getProblem().getLevel())
-                .link(savedSubmission.getProblem().getLink())
-                .build();
-    }
 }
