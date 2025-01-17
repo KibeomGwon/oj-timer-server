@@ -34,7 +34,10 @@ public class SubmissionService {
                     .orElseThrow(() -> new BadRequestException("문제 정보를 찾지 못했습니다."));
         }
 
-        Submission savedSubmission = submissionRepository.save(dto.toSubmission(problem));
+        Submission submission = dto.toSubmission();
+        submission.bindingProblem(problem);
+        // have to modify
+        Submission savedSubmission = submissionRepository.save(submission);
 
         return SubmissionDto.toDto(savedSubmission);
     }
@@ -46,6 +49,7 @@ public class SubmissionService {
 
     public Page<RecentSubmissionDto> getRecentSubmissionsPaging(SubmissionSearchCondition condition, Pageable pageable) {
         Page<RecentSubmissionDto> page = submissionQueryRepository.findRecentSubmissionPage(condition, pageable);
+
         return submissionQueryRepository.findRecentSubmissionPage(condition, pageable);
     }
 
@@ -53,6 +57,7 @@ public class SubmissionService {
         Problem problem = problemRepository
                 .findProblemByProblemTitleId(problemTitleId).orElseThrow(() -> new NotFoundException("문제를 찾지 못했습니다." + problemTitleId));
         Page<SubmissionDto> submissionDtos = submissionRepository.findAllByProblemTitleIdAndUsername(problemTitleId, username, pageable);
+
         return ProblemAndSubmissionsDto.create(ProblemDto.toDto(problem), submissionDtos);
     }
 

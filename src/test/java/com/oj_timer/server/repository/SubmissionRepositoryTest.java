@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-//@DataJpaTest   == inMemory 방식 -> h2 db가 필요
+//@DataJpaTest //   == inMemory 방식 -> h2 db가 필요
 @SpringBootTest
 @Transactional
 @Import(AppConfig.class)
@@ -37,9 +38,12 @@ class SubmissionRepositoryTest {
     public void saveTest() throws Exception {
         // given
         Problem problem = Problem.create("baekjoon_1004", "Gold V", "baekjoon", "link", "title");
-        Submission submission1 = Submission.create("111111", LocalDateTime.of(2025, 1, 5, 21, 9), "user1", problem);
-        Submission submission2 = Submission.create("222222", LocalDateTime.of(2025, 1, 5, 21, 10), "user1", problem);
-        Submission submission3 = Submission.create("333333", LocalDateTime.of(2025, 1, 20, 21, 11), "user1", problem);
+        Submission submission1 = Submission.create("111111", LocalDateTime.of(2025, 1, 5, 21, 9), "user1");
+        submission1.bindingProblem(problem);
+        Submission submission2 = Submission.create("222222", LocalDateTime.of(2025, 1, 5, 21, 10), "user1");
+        submission2.bindingProblem(problem);
+        Submission submission3 = Submission.create("333333", LocalDateTime.of(2025, 1, 20, 21, 11), "user1");
+        submission3.bindingProblem(problem);
 
         problemRepository.save(problem);
         submissionRepository.save(submission1);
