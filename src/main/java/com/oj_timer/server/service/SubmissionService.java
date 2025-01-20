@@ -2,6 +2,8 @@ package com.oj_timer.server.service;
 
 import com.oj_timer.server.dto.*;
 import com.oj_timer.server.dto.condition.SubmissionSearchCondition;
+import com.oj_timer.server.dto.domain.ProblemDto;
+import com.oj_timer.server.dto.domain.SubmissionDto;
 import com.oj_timer.server.exception_handler.exceptions.BadRequestException;
 import com.oj_timer.server.entity.Problem;
 import com.oj_timer.server.entity.Submission;

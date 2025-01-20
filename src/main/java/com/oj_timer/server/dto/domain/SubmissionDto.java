@@ -1,6 +1,5 @@
-package com.oj_timer.server.dto;
+package com.oj_timer.server.dto.domain;
 
-import com.oj_timer.server.entity.Problem;
 import com.oj_timer.server.entity.Submission;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

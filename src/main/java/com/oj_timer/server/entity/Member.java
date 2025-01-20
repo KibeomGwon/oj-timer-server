@@ -23,12 +23,37 @@ public class Member extends EntityDate {
     @OneToMany(mappedBy = "member")
     private List<Submission> submissions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CompleteReview> completeReviews = new ArrayList<>();
+
     private Member(String email, String password, String phone) {
         this.email = email;
         this.password = password;
         this.phone = phone;
     }
 
+    // === ddd === //
+
+    /**
+     * 복습 완료 엔티티 생성
+     * @param problem
+     */
+    public void completeReview(Problem problem) {
+        CompleteReview completeReview = CompleteReview.create();
+        completeReview.completeFrom(this);
+        completeReview.completeTo(problem);
+        completeReviews.add(completeReview);
+    }
+
+    public void needToSolveAgain(Long reviewId) {
+        CompleteReview completeReview = completeReviews.stream()
+                .filter(review -> review.getId() == reviewId)
+                .findFirst().orElse(null);
+
+        if (completeReview != null) {
+            completeReviews.remove(completeReview);
+        }
+    }
 
     // === 생성 메소드 === //
     public static Member create(String email, String password, String phone) {

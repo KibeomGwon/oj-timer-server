@@ -1,10 +1,10 @@
 package com.oj_timer.server.dto;
 
+import com.oj_timer.server.dto.domain.ProblemDto;
+import com.oj_timer.server.dto.domain.SubmissionDto;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 @Data
 @Builder

@@ -1,6 +1,6 @@
 package com.oj_timer.server.service;
 
-import com.oj_timer.server.dto.ProblemDto;
+import com.oj_timer.server.dto.domain.ProblemDto;
 import com.oj_timer.server.entity.Problem;
 import com.oj_timer.server.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;

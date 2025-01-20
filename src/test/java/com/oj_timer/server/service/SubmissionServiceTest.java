@@ -2,7 +2,7 @@ package com.oj_timer.server.service;
 
 
 import com.oj_timer.server.dto.InputSubmissionDto;
-import com.oj_timer.server.dto.SubmissionDto;
+import com.oj_timer.server.dto.domain.SubmissionDto;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

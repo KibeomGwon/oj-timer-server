@@ -1,6 +1,6 @@
 package com.oj_timer.server.service;
 
-import com.oj_timer.server.dto.MemberDto;
+import com.oj_timer.server.dto.domain.MemberDto;
 import com.oj_timer.server.entity.Member;
 import com.oj_timer.server.exception_handler.exceptions.NotFoundException;
 import com.oj_timer.server.repository.MemberRepository;

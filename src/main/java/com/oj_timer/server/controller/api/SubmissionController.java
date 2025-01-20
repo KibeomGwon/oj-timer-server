@@ -1,7 +1,7 @@
 package com.oj_timer.server.controller.api;
 
 import com.oj_timer.server.dto.InputSubmissionDto;
-import com.oj_timer.server.dto.SubmissionDto;
+import com.oj_timer.server.dto.domain.SubmissionDto;
 import com.oj_timer.server.service.SubmissionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

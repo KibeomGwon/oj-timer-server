@@ -1,4 +1,4 @@
-<%@ page import="com.oj_timer.server.dto.SubmissionDto" %>
+<%@ page import="com.oj_timer.server.dto.domain.SubmissionDto" %>
 <%@ page import="com.oj_timer.server.utils.JstlUtil" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

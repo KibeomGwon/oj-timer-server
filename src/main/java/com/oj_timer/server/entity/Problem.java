@@ -27,12 +27,23 @@ public class Problem extends EntityDate {
     @OneToMany(mappedBy = "problem")
     private List<Submission> submissions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "problem")
+    private List<CompleteReview> completeReviews = new ArrayList<>();
+
     public Problem(String problemTitleId, String level, String site, String link, String title) {
         this.problemTitleId = problemTitleId;
         this.level = level;
         this.site = site;
         this.link = link;
         this.title = title;
+    }
+
+    // === 연관관계 메소드 === //
+    public void completeFrom(CompleteReview completeReview) {
+        completeReview.completeTo(this);
+        if (!completeReviews.contains(completeReview)) {
+            completeReviews.add(completeReview);
+        }
     }
 
     // === ddd === //

@@ -1,4 +1,4 @@
-package com.oj_timer.server.dto;
+package com.oj_timer.server.dto.domain;
 
 import com.oj_timer.server.entity.Problem;
 import lombok.Builder;

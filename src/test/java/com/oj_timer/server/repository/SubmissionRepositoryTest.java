@@ -1,7 +1,7 @@
 package com.oj_timer.server.repository;
 
 import com.oj_timer.server.AppConfig;
-import com.oj_timer.server.dto.SubmissionDto;
+import com.oj_timer.server.dto.domain.SubmissionDto;
 import com.oj_timer.server.entity.Problem;
 import com.oj_timer.server.entity.Submission;
 import jakarta.persistence.EntityManager;
@@ -9,18 +9,15 @@ import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 //@DataJpaTest //   == inMemory 방식 -> h2 db가 필요
 @SpringBootTest
