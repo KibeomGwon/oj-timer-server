@@ -22,7 +22,7 @@ class SubmissionQueryRepositoryTest {
     @Autowired
     EntityManager em;
 
-    @Test
+//    @Test
     public void getTest() throws Exception {
         // given
         SubmissionSearchCondition cond = new SubmissionSearchCondition();

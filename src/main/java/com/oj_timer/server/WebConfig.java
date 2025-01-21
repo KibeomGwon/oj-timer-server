@@ -1,8 +1,10 @@
 package com.oj_timer.server;
 
+import com.oj_timer.server.controller.api.auth_jwt.JwtAccessInterceptor;
 import com.oj_timer.server.controller.web.argumentresolver.resolvers.LoginResolver;
 import com.oj_timer.server.controller.web.interceptor.AuthorizationInterceptor;
 import com.oj_timer.server.controller.web.interceptor.LogInterceptor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -12,7 +14,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
+
+    private final JwtAccessInterceptor jwtAccessInterceptor;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
@@ -23,7 +28,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns("*") // “*“같은 와일드카드를 사용
-                .allowedMethods("GET", "POST") // 허용할 HTTP method
+                .allowedMethods("GET", "POST")// 허용할 HTTP method
+                .allowedHeaders("*")
                 .allowCredentials(true); // 쿠키 인증 요청 허용
     }
 
@@ -33,10 +39,17 @@ public class WebConfig implements WebMvcConfigurer {
                 .order(0)
                 .addPathPatterns("/**");
 
-        registry.addInterceptor(new AuthorizationInterceptor())
+        registry.addInterceptor(jwtAccessInterceptor)
                 .order(1)
+                .addPathPatterns("/api/**");
+
+
+        registry.addInterceptor(new AuthorizationInterceptor())
+                .order(2)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/api/**", "/login", "/register", "/css-files/**");
+                .excludePathPatterns("/login", "/register", "/css-files/**", "/favicon.ico", "/api/**", "/api");
+
+//        "/api", "/api/**",
     }
 
 

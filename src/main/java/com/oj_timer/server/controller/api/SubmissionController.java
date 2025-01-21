@@ -1,5 +1,6 @@
 package com.oj_timer.server.controller.api;
 
+import com.oj_timer.server.controller.web.argumentresolver.annotations.Login;
 import com.oj_timer.server.dto.InputSubmissionDto;
 import com.oj_timer.server.dto.domain.SubmissionDto;
 import com.oj_timer.server.service.SubmissionService;
@@ -25,18 +26,15 @@ public class SubmissionController {
      * @return Response<Boolean>()
      */
     @GetMapping("/{elementId}")
-    public ResponseEntity<String> checkExists(@PathVariable String elementId, @RequestParam String username, @RequestParam String site) {
-        log.info("SubmissionController.checkExists");
-        submissionService.isExistsSubmissionByElementId(elementId, username, site);
-        return new ResponseEntity<String>("exists", HttpStatus.OK);
+    public ResponseEntity<String> checkExists(@Login String email, @PathVariable String elementId, @RequestParam String username, @RequestParam String site) {
+        submissionService.isExistsSubmissionByElementId(email, elementId, username, site);
+        return new ResponseEntity<>("exists", HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<SubmissionDto> createSubmission(@RequestBody InputSubmissionDto dto) {
-        log.info("SubmissionController.createSubmission");
-        System.out.println(dto.toString());
+    public ResponseEntity<SubmissionDto> createSubmission(@Login String email, @RequestBody InputSubmissionDto dto) {
 
-        SubmissionDto savedDto = submissionService.save(dto);
+        SubmissionDto savedDto = submissionService.save(email, dto);
         return new ResponseEntity<>(savedDto, HttpStatus.CREATED);
     }
 }

@@ -27,21 +27,22 @@ public class WebSubmissionController {
 
 
     @GetMapping
-    public String findAll(@Login String memberId, @ModelAttribute SubmissionSearchCondition condition, Pageable pageable, Model model) {
+    public String findAll(@Login String email, @ModelAttribute SubmissionSearchCondition condition, Pageable pageable, Model model) {
 
-        log.info("MEBMERID = {}", memberId);
+        if (email == null)
+        log.info("MEBMERID = {}", email);
 
-        Page<RecentSubmissionDto> page = submissionService.getRecentSubmissionsPaging(condition, pageable);
+        Page<RecentSubmissionDto> page = submissionService.getRecentSubmissionsPaging(email, condition, pageable);
         model.addAttribute("content", page.getContent());
         model.addAttribute("pageCount", page.getTotalPages());
         return "main";
     }
 
     @GetMapping("/{problemId}")
-    public String findOne(@Login String memberId,
+    public String findOne(@Login String email,
                           @PathVariable String problemId, @RequestParam String username, Pageable pageable, Model model) {
 
-        log.info("MEBMERID = {}", memberId);
+        log.info("MEBMERID = {}", email);
 
         ProblemAndSubmissionsDto page = submissionService.findSinglePageByProblemTitleIdAndUsername(problemId, username, pageable);
         model.addAttribute("submissions", page.getSubmissionDtos().getContent());

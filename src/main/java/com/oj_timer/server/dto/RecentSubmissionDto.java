@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class RecentSubmissionDto {
+    private String email;
     private String username;
     private String elementId;
     private String title;
@@ -20,7 +21,8 @@ public class RecentSubmissionDto {
     private String link;
 
     @QueryProjection
-    public RecentSubmissionDto(String username, String elementId, String title, String problemId, String site, LocalDateTime recentSubmissionTime, String level, String link) {
+    public RecentSubmissionDto(String email, String username, String elementId, String title, String problemId, String site, LocalDateTime recentSubmissionTime, String level, String link) {
+        this.email = email;
         this.username = username;
         this.elementId = elementId;
         this.title = title;

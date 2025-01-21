@@ -55,6 +55,7 @@ public class SubmissionQueryRepository {
                 .where(
                         siteEq(condition.getSite()),
                         usernameEq(condition.getUsername()),
+                        submission.member.email.eq(condition.getEmail()),
                         submission.submissionTime.eq(where)
                 )
                 .orderBy(submission.submissionTime.desc())
@@ -77,6 +78,7 @@ public class SubmissionQueryRepository {
 
     private QRecentSubmissionDto getSubmissionDto() {
         return new QRecentSubmissionDto(
+                submission.member.email,
                 submission.username,
                 submission.elementId,
                 problem.title,

@@ -23,6 +23,7 @@
     <div>
         <table id="submission-table">
             <tr>
+                <th>이메일</th>
                 <th>유저</th>
                 <th>제출 번호</th>
                 <th>제목</th>
@@ -33,6 +34,7 @@
             </tr>
             <c:forEach var="submission" items="${content}" varStatus="st">
                 <tr>
+                    <td>${submission.email}</td>
                     <td>${submission.username}</td>
                     <td>${submission.elementId}</td>
                     <td><a href="${submission.link}">${submission.title}</a></td>

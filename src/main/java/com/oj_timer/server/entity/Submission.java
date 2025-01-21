@@ -23,6 +23,7 @@ public class Submission extends EntityDate {
     @Column(name = "submission_time")
     private LocalDateTime submissionTime;
     private String username;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -43,7 +44,7 @@ public class Submission extends EntityDate {
         problem.getSubmissions().add(this);
     }
 
-    public void solveProblem(Member member) {
+    public void solveFrom(Member member) {
         member.getSubmissions().add(this);
         this.member = member;
     }

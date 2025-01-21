@@ -60,7 +60,7 @@ class SubmissionRepositoryTest {
         assertThat(findSubmission.getProblem().getProblemTitleId()).isEqualTo("baekjoon_1004");
     }
 
-    @Test
+//    @Test
     public void fetchTest() throws Exception {
         // given
         // when

@@ -8,4 +8,5 @@ import lombok.Setter;
 public class SubmissionSearchCondition {
     private String username;
     private String site;
+    private String email;
 }
