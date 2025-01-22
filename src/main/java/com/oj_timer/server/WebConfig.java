@@ -3,6 +3,7 @@ package com.oj_timer.server;
 import com.oj_timer.server.controller.api.auth_jwt.JwtAccessInterceptor;
 import com.oj_timer.server.controller.web.argumentresolver.resolvers.LoginResolver;
 import com.oj_timer.server.controller.web.interceptor.AuthorizationInterceptor;
+import com.oj_timer.server.controller.web.interceptor.ErrorInterceptor;
 import com.oj_timer.server.controller.web.interceptor.LogInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -35,19 +36,23 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LogInterceptor())
+        registry.addInterceptor(new ErrorInterceptor())
                 .order(0)
+                .addPathPatterns("/error");
+
+        registry.addInterceptor(new LogInterceptor())
+                .order(1)
                 .addPathPatterns("/**");
 
         registry.addInterceptor(jwtAccessInterceptor)
-                .order(1)
-                .addPathPatterns("/api/**");
-
+                .order(2)
+                .addPathPatterns("/api/**")
+                .excludePathPatterns("/api/authorizaiton/jwt");
 
         registry.addInterceptor(new AuthorizationInterceptor())
-                .order(2)
+                .order(3)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login", "/register", "/css-files/**", "/favicon.ico", "/api/**", "/api");
+                .excludePathPatterns("/login", "/register", "/css-files/**", "/favicon.ico", "/api/**");
 
 //        "/api", "/api/**",
     }

@@ -5,7 +5,10 @@ import io.jsonwebtoken.io.Decoders;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.UUID;
 
 import static com.oj_timer.server.controller.api.auth_jwt.JwtConst.*;
 
@@ -13,8 +16,8 @@ import static com.oj_timer.server.controller.api.auth_jwt.JwtConst.*;
 public class JwtGenerator {
     private final String key;
 
-    public JwtGenerator(@Value("${JWT.SECRETKEY}") String secretKey) {
-        key = secretKey;
+    public JwtGenerator(@Value("${JWT.SECRETKEY}") String secretKey) throws Exception {
+        key = getSecretKey(secretKey);
     }
 
     public JwtDto generate(String memberEmail) {
@@ -42,4 +45,6 @@ public class JwtGenerator {
                 .refreshToken(refreshToken)
                 .build();
     }
+
+
 }

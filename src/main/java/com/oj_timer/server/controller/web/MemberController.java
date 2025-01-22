@@ -64,7 +64,6 @@ public class MemberController {
         return "redirect:/login";
     }
 
-
     private MemberDto toMemberDto(LoginForm form) {
         return MemberDto.builder()
                 .email(form.getEmail())

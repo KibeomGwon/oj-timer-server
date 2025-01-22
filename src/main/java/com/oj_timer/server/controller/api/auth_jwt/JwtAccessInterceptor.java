@@ -3,6 +3,7 @@ package com.oj_timer.server.controller.api.auth_jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oj_timer.server.controller.web.session.SessionConst;
 import com.querydsl.core.util.StringUtils;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -24,7 +25,7 @@ public class JwtAccessInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(request.getMethod().equals("OPTIONS")) {
+        if (request.getMethod().equals("OPTIONS")) {
             return true;
         }
 
@@ -33,18 +34,26 @@ public class JwtAccessInterceptor implements HandlerInterceptor {
         String token = getTokenFromRequest(request);
 
         log.info("TOKEN [{}]", token);
+
         HttpSession session = request.getSession();
         log.info("SESSION [{}][{}]", session, session.getAttribute(SessionConst.LOGIN_MANAGER));
+
         if (session.getAttribute(SessionConst.LOGIN_MANAGER) != null) {
             log.info("BE LOGIN");
             return true;
         }
 
-        if (StringUtils.isNullOrEmpty(token)) {
+        if (!resolver.validation(token)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-            log.info("NOT EXISTS TOKEN");
+            log.info("UNAUTHORIZED TOKEN");
             return false;
         }
+
+//        if (StringUtils.isNullOrEmpty(token)) {
+//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+//            log.info("NOT EXISTS TOKEN");
+//            return false;
+//        }
 
         if (requestURI.contains("/refresh-jwt")) {
             refreshToken(token, response);
@@ -66,6 +75,8 @@ public class JwtAccessInterceptor implements HandlerInterceptor {
         JwtDto jwts = generator.generate(memberEmail);
 
         String result = (new ObjectMapper()).writeValueAsString(jwts);
+
+        log.info("REFRESHED TOKEN [{}]", result);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
