@@ -20,6 +20,7 @@ public class MemberDto {
     }
 
     public static MemberDto toDto(Member member) {
+        if (member == null) return null;
         return MemberDto.builder().
                 email(member.getEmail()).
                 password(member.getPassword()).

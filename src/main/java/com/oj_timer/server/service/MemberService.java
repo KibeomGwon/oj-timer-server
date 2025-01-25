@@ -18,7 +18,7 @@ public class MemberService {
         }
         Member savedMember = memberRepository.save(member);
 
-        return MemberDto.toDto(member);
+        return MemberDto.toDto(savedMember);
     }
 
     public MemberDto findById(Long id) {
@@ -29,7 +29,7 @@ public class MemberService {
     public MemberDto login(Member member) {
         return MemberDto.toDto(memberRepository.findByEmail(member.getEmail())
                 .filter(m -> m.getPassword().equals(member.getPassword()))
-                .orElseThrow(() -> new NotFoundException("아이디 또는 패스워드가 맞지 않습니다."))
+                .orElse(null)
         );
     }
 }

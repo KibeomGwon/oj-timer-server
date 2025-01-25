@@ -1,14 +1,10 @@
 package com.oj_timer.server.controller.api.auth_jwt;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
-import java.util.UUID;
 
 import static com.oj_timer.server.controller.api.auth_jwt.JwtConst.*;
 
@@ -32,7 +28,6 @@ public class JwtGenerator {
                 .setExpiration(accessTokenExpireTime)
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
-
         //
         String refreshToken = Jwts.builder()
                 .setSubject(memberEmail)

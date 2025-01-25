@@ -17,7 +17,7 @@ public class Problem extends EntityDate {
     @GeneratedValue
     @Column(name = "problem_id")
     private Long id;
-    @Column(name = "problem_title_id", unique = true)
+    @Column(name = "problem_title_id")
     private String problemTitleId;
     private String level;
     private String site;

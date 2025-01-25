@@ -36,25 +36,21 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new ErrorInterceptor())
-                .order(0)
-                .addPathPatterns("/error");
-
         registry.addInterceptor(new LogInterceptor())
                 .order(1)
-                .addPathPatterns("/**");
+                .addPathPatterns("/**")
+                .excludePathPatterns("/error");
 
         registry.addInterceptor(jwtAccessInterceptor)
                 .order(2)
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/authorizaiton/jwt");
+                .excludePathPatterns("/api/authorizaiton/jwt", "/error");
 
         registry.addInterceptor(new AuthorizationInterceptor())
                 .order(3)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login", "/register", "/css-files/**", "/favicon.ico", "/api/**");
+                .excludePathPatterns("/login", "/register", "/css-files/**", "/favicon.ico", "/api/**", "/error");
 
-//        "/api", "/api/**",
     }
 
 

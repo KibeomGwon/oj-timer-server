@@ -16,10 +16,18 @@
 <body>
     <h1>로그인</h1>
     <form action="/login" method="post">
-      이메일 : <input type="email" name="email"/>
-      비밀번호 : <input type="password" name="password">
+      이메일 : <input type="email" name="email" value="${loginForm.email}"/>
+      비밀번호 : <input type="password" name="password" value="${loginForm.password}">
       <input type="submit" value="로그인"/>
     </form>
     <button type="button" onclick="location.href='<c:url value="/register"></c:url>'">회원가입</button>
+
+    <spring:hasBindErrors name="loginForm">
+        <c:if test="${errors.hasGlobalErrors()}">
+            <script>
+                alert(`${errors.globalErrors.defaultMessage}`);
+            </script>
+        </c:if>
+    </spring:hasBindErrors>
 </body>
 </html>

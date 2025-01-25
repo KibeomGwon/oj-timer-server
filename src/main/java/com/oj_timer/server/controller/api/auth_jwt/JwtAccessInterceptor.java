@@ -25,6 +25,7 @@ public class JwtAccessInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // preflight로 인한 에러를 막기위한 로직
         if (request.getMethod().equals("OPTIONS")) {
             return true;
         }
@@ -49,12 +50,6 @@ public class JwtAccessInterceptor implements HandlerInterceptor {
             return false;
         }
 
-//        if (StringUtils.isNullOrEmpty(token)) {
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-//            log.info("NOT EXISTS TOKEN");
-//            return false;
-//        }
-
         if (requestURI.contains("/refresh-jwt")) {
             refreshToken(token, response);
             log.info("REFRESH TOKEN");
@@ -78,6 +73,7 @@ public class JwtAccessInterceptor implements HandlerInterceptor {
 
         log.info("REFRESHED TOKEN [{}]", result);
 
+        // controller로 가지않고 interceptor에서 바로 응답을 보내기 위한 로직
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(result);

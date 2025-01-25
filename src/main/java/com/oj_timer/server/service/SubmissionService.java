@@ -58,8 +58,6 @@ public class SubmissionService {
 
     public Page<RecentSubmissionDto> getRecentSubmissionsPaging(String email, SubmissionSearchCondition condition, Pageable pageable) {
         condition.setEmail(email);
-        System.out.println(condition.getEmail());
-
         return submissionQueryRepository.findRecentSubmissionPage(condition, pageable);
     }
 

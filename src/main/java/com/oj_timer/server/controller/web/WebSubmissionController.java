@@ -18,6 +18,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -30,11 +33,15 @@ public class WebSubmissionController {
     public String findAll(@Login String email, @ModelAttribute SubmissionSearchCondition condition, Pageable pageable, Model model) {
 
         if (email == null)
-        log.info("MEBMERID = {}", email);
+            log.info("MEBMERID = {}", email);
+
 
         Page<RecentSubmissionDto> page = submissionService.getRecentSubmissionsPaging(email, condition, pageable);
+
         model.addAttribute("content", page.getContent());
         model.addAttribute("pageCount", page.getTotalPages());
+        model.addAttribute("totalElements", page.getTotalElements());
+
         return "main";
     }
 
@@ -52,6 +59,4 @@ public class WebSubmissionController {
 
         return "single-page";
     }
-
-
 }
