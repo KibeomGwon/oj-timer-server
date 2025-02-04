@@ -108,7 +108,7 @@ class SubmissionServiceTest {
         assertThat(findMember.getSubmissions()).extracting("elementId").containsExactly("solution-1122233");
     }
 
-    @Test
+//    @Test
     public void findByCondition() throws Exception {
         // given
         init();

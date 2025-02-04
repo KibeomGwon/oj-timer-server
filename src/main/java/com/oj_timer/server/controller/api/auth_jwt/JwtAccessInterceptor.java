@@ -2,8 +2,7 @@ package com.oj_timer.server.controller.api.auth_jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oj_timer.server.controller.web.session.SessionConst;
-import com.querydsl.core.util.StringUtils;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.oj_timer.server.repository.RefreshTokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -22,6 +21,7 @@ public class JwtAccessInterceptor implements HandlerInterceptor {
 
     private final JwtResolver resolver;
     private final JwtGenerator generator;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -32,16 +32,18 @@ public class JwtAccessInterceptor implements HandlerInterceptor {
 
         String requestURI = request.getRequestURI();
 
-        String token = getTokenFromRequest(request);
-
-        log.info("TOKEN [{}]", token);
+        String token = resolver.getTokenFromRequest(request);
 
         HttpSession session = request.getSession();
-        log.info("SESSION [{}][{}]", session, session.getAttribute(SessionConst.LOGIN_MANAGER));
 
         if (session.getAttribute(SessionConst.LOGIN_MANAGER) != null) {
+            log.info("SESSION [{}]", session.getAttribute(SessionConst.LOGIN_MANAGER));
             log.info("BE LOGIN");
             return true;
+        }
+
+        if (requestURI.contains("/refresh-jwt")) {
+            return refreshToken(token, response);
         }
 
         if (!resolver.validation(token)) {
@@ -50,40 +52,45 @@ public class JwtAccessInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        if (requestURI.contains("/refresh-jwt")) {
-            refreshToken(token, response);
-            log.info("REFRESH TOKEN");
+        String email = resolver.parseJwt(token);
+
+        if (refreshTokenRepository.findOne(email) == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            log.info("UNAUTHORIZED TOKEN");
             return false;
         }
 
-        String email = resolver.parseJwt(token);
-
-        HttpSession createdSession = request.getSession();
-        createdSession.setAttribute(SessionConst.LOGIN_MANAGER, email);
-        log.info("COMPLETE AUTHORIZATION [{}]", createdSession.getAttribute(SessionConst.LOGIN_MANAGER));
         return true;
     }
 
-    private void refreshToken(String token, HttpServletResponse response) throws IOException {
+    private boolean refreshToken(String token, HttpServletResponse response) throws IOException {
+
+        if (!resolver.validation(token)) {
+            refreshTokenRepository.deleteByToken(token);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            log.info("UNAUTHORIZED TOKEN IN REFRESH");
+            return false;
+        }
+
         String memberEmail = resolver.parseJwt(token);
+
+        // cache에 없거나 refresh token이 일치하지 않을 때
+        if (refreshTokenRepository.findOne(memberEmail) == null || !refreshTokenRepository.findOne(memberEmail).equals(token)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            return false;
+        }
 
         JwtDto jwts = generator.generate(memberEmail);
 
         String result = (new ObjectMapper()).writeValueAsString(jwts);
 
-        log.info("REFRESHED TOKEN [{}]", result);
 
         // controller로 가지않고 interceptor에서 바로 응답을 보내기 위한 로직
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(result);
-    }
 
-    private String getTokenFromRequest(HttpServletRequest request) {
-        String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authorization != null && authorization.startsWith("Bearer ")) {
-            return authorization.substring(7).trim();
-        }
-        return null;
+        log.info("REFRESH COMPLETE");
+        return false;
     }
 }

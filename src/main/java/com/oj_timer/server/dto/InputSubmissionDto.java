@@ -26,7 +26,7 @@ public class InputSubmissionDto {
     }
 
     public Submission toSubmission() {
-        Submission submission = Submission.create(elementId, submissionTime, username);
+        Submission submission = Submission.create(elementId, submissionTime, username, language);
         return submission;
     }
 }

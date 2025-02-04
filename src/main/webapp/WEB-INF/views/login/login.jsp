@@ -19,15 +19,20 @@
       이메일 : <input type="email" name="email" value="${loginForm.email}"/>
       비밀번호 : <input type="password" name="password" value="${loginForm.password}">
       <input type="submit" value="로그인"/>
+      <button type="button" onclick="location.href='<c:url value="/register"></c:url>'">회원가입</button>
+
     </form>
-    <button type="button" onclick="location.href='<c:url value="/register"></c:url>'">회원가입</button>
 
     <spring:hasBindErrors name="loginForm">
-        <c:if test="${errors.hasGlobalErrors()}">
+        <c:if test="${not empty errors.globalErrors}">
             <script>
-                alert(`${errors.globalErrors.defaultMessage}`);
+                <c:forEach var="error" items="${errors.globalErrors}">
+                alert("<c:out value='${error.defaultMessage}'/>");
+                </c:forEach>
             </script>
         </c:if>
     </spring:hasBindErrors>
+
+
 </body>
 </html>

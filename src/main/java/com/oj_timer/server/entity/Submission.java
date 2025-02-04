@@ -23,6 +23,8 @@ public class Submission extends EntityDate {
     @Column(name = "submission_time")
     private LocalDateTime submissionTime;
     private String username;
+    @Column(name = "language")
+    private String language;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -32,10 +34,11 @@ public class Submission extends EntityDate {
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
-    private Submission(String elementId, LocalDateTime submissionTime, String username) {
+    private Submission(String elementId, LocalDateTime submissionTime, String username, String language) {
         this.elementId = elementId;
         this.submissionTime = submissionTime;
         this.username = username;
+        this.language = language;
     }
 
     // === 연관관계 메소드 === //
@@ -49,9 +52,9 @@ public class Submission extends EntityDate {
         this.member = member;
     }
 
-    // === ddd === //
-    public static Submission create(String elementId, LocalDateTime submissionTime, String username) {
-        Submission submission = new Submission(elementId, submissionTime, username);
+    // === 생성 메소드 === //
+    public static Submission create(String elementId, LocalDateTime submissionTime, String username, String language) {
+        Submission submission = new Submission(elementId, submissionTime, username, language);
         return submission;
     }
 }

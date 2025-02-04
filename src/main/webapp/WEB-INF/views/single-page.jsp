@@ -49,12 +49,14 @@
     <table id="problem-info-table">
       <tr>
         <th>번호</th>
+        <th>제목</th>
         <th>난이도</th>
         <th>사이트</th>
       </tr>
       <tr>
         <td><a href="${problem.link}" id="problem-original-id"></a></td>
-      <td><c:out value="${problem.level}"></c:out></td>
+        <td><c:out value="${problem.title}"></c:out></td>
+        <td><c:out value="${problem.level}"></c:out></td>
         <td><c:out value="${JstlUtil.siteEnToKr(problem.site)}"></c:out></td>
       </tr>
     </table>
@@ -79,7 +81,6 @@
     </table>
   </div>
 
-  <button id="back-button" onclick="location.href='<c:url value='/?username=${submissions.get(0).username}&site=${problem.site}'/>'"> 뒤로가기 </button>
-
+  <button id="back-button" onclick="location.href='<c:url value='/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}'/>'"> 뒤로가기 </button>
 </body>
 </html>

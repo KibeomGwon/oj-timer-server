@@ -14,8 +14,4 @@ public class RegisterForm {
 
     @NotEmpty(message = "비밀번호를 입력해주세요")
     private String password;
-
-    @NotEmpty(message = "휴대폰 번호를 입력해주세요")
-    @Pattern(regexp = "^\\d{11}$", message = "11 개의 숫자만 입력해주세요")
-    private String phone;
 }

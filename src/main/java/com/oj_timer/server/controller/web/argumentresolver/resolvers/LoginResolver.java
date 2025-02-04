@@ -1,19 +1,27 @@
 package com.oj_timer.server.controller.web.argumentresolver.resolvers;
 
+import com.oj_timer.server.controller.api.auth_jwt.JwtResolver;
 import com.oj_timer.server.controller.web.argumentresolver.annotations.Login;
 import com.oj_timer.server.controller.web.session.SessionConst;
-import com.oj_timer.server.entity.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+@Component
 @Slf4j
+@RequiredArgsConstructor
 public class LoginResolver implements HandlerMethodArgumentResolver {
+
+    private final JwtResolver jwtResolver;
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         log.info("supportsParameter");
@@ -33,11 +41,21 @@ public class LoginResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         HttpSession session = request.getSession(false);
 
-        if (session == null)
+
+        String token = jwtResolver.getTokenFromRequest(request);
+
+        // session 만 필요할 때 session 만 받는 일이 있고, token 만 필요할 때 token 만 받는 일도 있다.
+        if (session == null && token == null)
             return null;
 
-        log.info("resolveArgument {}", session.getAttribute(SessionConst.LOGIN_MANAGER));
+        String email = null;
 
-        return session.getAttribute(SessionConst.LOGIN_MANAGER);
+        if (jwtResolver.validation(token)) {
+            email = jwtResolver.parseJwt(token);
+        }
+
+        log.info("resolveArgument {}", email != null ? email : session.getAttribute(SessionConst.LOGIN_MANAGER));
+
+        return email != null ? email : session.getAttribute(SessionConst.LOGIN_MANAGER);
     }
 }

@@ -4,6 +4,7 @@ import com.oj_timer.server.controller.web.form.LoginForm;
 import com.oj_timer.server.controller.web.form.RegisterForm;
 import com.oj_timer.server.controller.web.session.SessionConst;
 import com.oj_timer.server.dto.domain.MemberDto;
+import com.oj_timer.server.repository.RefreshTokenRepository;
 import com.oj_timer.server.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import java.util.Arrays;
 public class MemberController {
 
     private final MemberService memberService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @GetMapping("/login")
     public String loginForm(@ModelAttribute LoginForm loginForm) {
@@ -72,6 +74,20 @@ public class MemberController {
         return "redirect:/login";
     }
 
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        String email = (String) session.getAttribute(SessionConst.LOGIN_MANAGER);
+
+        if (session != null) {
+            session.invalidate();
+        }
+        refreshTokenRepository.deleteByEmail(email);
+
+        return "redirect:/";
+    }
+
     private MemberDto toMemberDto(LoginForm form) {
         return MemberDto.builder()
                 .email(form.getEmail())
@@ -83,7 +99,6 @@ public class MemberController {
         return MemberDto.builder()
                 .email(form.getEmail())
                 .password(form.getPassword())
-                .phone(form.getPhone())
                 .build();
     }
 }

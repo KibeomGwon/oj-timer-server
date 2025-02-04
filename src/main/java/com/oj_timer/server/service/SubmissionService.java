@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -68,6 +70,11 @@ public class SubmissionService {
 
         return ProblemAndSubmissionsDto.create(ProblemDto.toDto(problem), submissionDtos);
     }
+
+    public List<SubmissionQueryRepository.SelectObject> getSelectObjects(String email) {
+        return submissionQueryRepository.getSelectObjects(email);
+    }
+
 
 
     // === private method === //

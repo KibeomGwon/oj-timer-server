@@ -14,9 +14,11 @@
     <link rel="stylesheet" href="css-files/register.css" type="text/css">
 </head>
 <body>
-  <form method="post" action="<c:url value="/register"></c:url>">
+<div class="register-container">
 
-    이메일 : <input type="email", name="email">
+  <h2>회원가입</h2>
+  <label for="input-email">이메일</label>
+  <input id="input-email" type="email" name="email" placeholder="이메일을 입력하세요">
 
   <spring:hasBindErrors name="registerForm">
     <c:if test="${errors.hasFieldErrors('email') }">
@@ -24,7 +26,15 @@
     </c:if>
   </spring:hasBindErrors>
 
-    비밀번호 : <input type="password" name="password">
+  <button id="email-validate">인증번호 요청</button>
+
+  <div id="email-validate-number-box" style="display: none">
+    <input id="email-validate-number-input" type="text" placeholder="인증번호를 입력하세요"/>
+    <label id="email-is-validate" style="visibility: hidden">일치하지 않습니다.</label>
+  </div>
+
+  <label for="input-password">비밀번호</label>
+  <input id="input-password" type="password" name="password" placeholder="비밀번호를 입력하세요">
 
   <spring:hasBindErrors name="registerForm">
     <c:if test="${errors.hasFieldErrors('password') }">
@@ -32,17 +42,78 @@
     </c:if>
   </spring:hasBindErrors>
 
-    휴대폰 번호 : <input type="text" name="phone">
-
-  <spring:hasBindErrors name="registerForm">
-    <c:if test="${errors.hasFieldErrors('phone') }">
-      <strong id="error-message">${errors.getFieldError( 'phone' ).defaultMessage }</strong>
-    </c:if>
-  </spring:hasBindErrors>
-
-  <input type="submit" value="확인">
-
+    <form method="post" action="<c:url value="/register"></c:url>">
+      <input id="real-input-email" type="email", name="email" style="display: none">
+      <input id="real-input-password" type="password" name="password" style="display: none">
+      <input id="input-submit" type="submit" value="확인" disabled>
   </form>
-  <button onclick="location.href='<c:url value="/"></c:url>'">취소</button>
+  <button class="cancel-btn" onclick="location.href='<c:url value='/'/>'">취소</button>
+</div>
+
+<script>
+  window.onload = () => {
+    const emailRequestButton = document.getElementById("email-validate");
+    emailRequestButton.onclick = EmailValidateButtonEvent;
+
+    const numberInput = document.getElementById('email-validate-number-input');
+    numberInput.oninput = changeInputNumberEvent;
+
+    const passwordInput = document.getElementById('input-password');
+    passwordInput.oninput = changeInputPasswordEvent;
+  }
+
+  let number;
+
+  async function EmailValidateButtonEvent() {
+    document.getElementById("email-validate-number-box").style.display = ""
+
+    const email = document.getElementById('input-email').value;
+
+    document.getElementById("real-input-email").value = email;
+
+    const data = { mail : email };
+
+    const response = await fetch("http://localhost:8080/api/mail", {
+      method : "post",
+      headers : {
+        "Content-type" : "application/json"
+      },
+      body : JSON.stringify(data)
+    });
+
+    number = await response.json();
+  }
+
+  function changeInputNumberEvent() {
+    let inputNumber = document.getElementById('email-validate-number-input').value;
+    const label = document.getElementById("email-is-validate");
+    const submit = document.getElementById("input-submit");
+
+    inputNumber = parseInt(inputNumber);
+    console.log(typeof inputNumber)
+
+    label.style.visibility = "";
+
+    if (inputNumber !== number) {
+      label.innerHTML = "일치하지 않습니다.";
+      label.style.color = "red";
+      submit.disabled = true;
+      submit.style.background = "#EFEFEF4D";
+      submit.style.color = "#1010104D";
+
+    } else {
+      label.innerHTML = "일치합니다.";
+      label.style.color = "black";
+      submit.disabled = false;
+      submit.style.background = "#007BFF";
+      submit.style.color = "white";
+    }
+  }
+
+  function changeInputPasswordEvent() {
+    const value = document.getElementById("input-password").value;
+    document.getElementById("real-input-password").value = value;
+  }
+</script>
 </body>
 </html>

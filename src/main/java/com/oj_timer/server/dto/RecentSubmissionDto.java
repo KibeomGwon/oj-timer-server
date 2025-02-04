@@ -19,9 +19,10 @@ public class RecentSubmissionDto {
     private LocalDateTime recentSubmissionTime;
     private String level;
     private String link;
+    private String language;
 
     @QueryProjection
-    public RecentSubmissionDto(String email, String username, String elementId, String title, String problemId, String site, LocalDateTime recentSubmissionTime, String level, String link) {
+    public RecentSubmissionDto(String email, String username, String elementId, String title, String problemId, String site, LocalDateTime recentSubmissionTime, String level, String link, String language) {
         this.email = email;
         this.username = username;
         this.elementId = elementId;
@@ -31,5 +32,6 @@ public class RecentSubmissionDto {
         this.recentSubmissionTime = recentSubmissionTime;
         this.level = level;
         this.link = link;
+        this.language = language;
     }
 }

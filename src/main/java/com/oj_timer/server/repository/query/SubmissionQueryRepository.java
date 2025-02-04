@@ -3,21 +3,14 @@ package com.oj_timer.server.repository.query;
 import com.oj_timer.server.dto.QRecentSubmissionDto;
 import com.oj_timer.server.dto.RecentSubmissionDto;
 import com.oj_timer.server.dto.condition.SubmissionSearchCondition;
-import com.oj_timer.server.entity.QProblem;
-import com.oj_timer.server.entity.QSubmission;
-import com.oj_timer.server.entity.Submission;
-import com.querydsl.core.QueryFactory;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.SubQueryExpression;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -54,26 +47,96 @@ public class SubmissionQueryRepository {
                 .join(submission.problem, problem)
                 .where(
                         siteEq(condition.getSite()),
-                        usernameEq(condition.getUsername()),
                         submission.member.email.eq(condition.getEmail()),
-                        submission.submissionTime.eq(where)
+                        submission.submissionTime.eq(where),
+                        languageEq(condition.getLanguage()),
+                        titleLike(condition.getTitle()),
+                        levelEq(condition.getLevel())
                 )
                 .orderBy(submission.submissionTime.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long count = fetched != null ? fetched.stream().count() : 0;
+        Long count = factory
+                .select(submission.count())
+                .from(submission)
+                .join(submission.problem, problem)
+                .where(
+                        siteEq(condition.getSite()),
+                        submission.member.email.eq(condition.getEmail()),
+                        submission.submissionTime.eq(where),
+                        languageEq(condition.getLanguage()),
+                        titleLike(condition.getTitle()),
+                        levelEq(condition.getLevel())
+                )
+                .orderBy(submission.submissionTime.desc())
+                .fetchOne();
 
         return new PageImpl<>(fetched, pageable, count);
     }
 
-    private BooleanExpression siteEq(String site) {
-        return isEmpty(site) ? null : problem.site.contains(site);
+    public List<SelectObject> getSelectObjects(String email) {
+        List<SelectObject> fetch = factory
+                .select(Projections.fields(SelectObject.class,
+                        problem.site.as("site"),
+                        submission.language.as("language"),
+                        problem.level.as("level")
+                ))
+                .from(submission)
+                .join(problem)
+                .on(submission.problem.eq(problem))
+                .where(submission.member.email.eq(email))
+                .groupBy(problem.site, submission.language, problem.level)
+                .fetch();
+        return fetch;
     }
 
-    private BooleanExpression usernameEq(String username) {
-        return isEmpty(username) ? null : submission.username.eq(username);
+
+    @Data
+    public static class SelectObject {
+        private String site;
+        private String language;
+        private String level;
+
+        public SelectObject() {
+        }
+
+        public SelectObject(String site, String language, String level) {
+            this.site = site;
+            this.language = language;
+            this.level = level;
+        }
+
+        @Override
+        public String toString() {
+            return "SelectObject{" +
+                    "site='" + site + '\'' +
+                    ", language='" + language + '\'' +
+                    ", level='" + level + '\'' +
+                    '}';
+        }
+    }
+
+
+
+
+
+
+    private BooleanExpression languageEq(String language) {
+        return isEmpty(language) ? null : submission.language.eq(language);
+    }
+
+    private BooleanExpression titleLike(String title) {
+        return isEmpty(title) ? null : problem.title.contains(title);
+    }
+
+    private BooleanExpression levelEq(String level) {
+        return isEmpty(level) ? null : problem.level.eq(level);
+    }
+
+    private BooleanExpression siteEq(String site) {
+        return isEmpty(site) ? null : problem.site.contains(site);
     }
 
     private QRecentSubmissionDto getSubmissionDto() {
@@ -86,7 +149,9 @@ public class SubmissionQueryRepository {
                 problem.site,
                 submission.submissionTime,
                 problem.level,
-                problem.link);
+                problem.link,
+                submission.language
+        );
     }
 
 }
