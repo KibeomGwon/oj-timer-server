@@ -38,10 +38,7 @@ public class WebSubmissionController {
 
         Page<RecentSubmissionDto> page = submissionService.getRecentSubmissionsPaging(email, condition, pageable);
 
-
         model.addAttribute("paging", page);
-
-
 
         List<SubmissionQueryRepository.SelectObject> selectObjects = submissionService.getSelectObjects(email);
 

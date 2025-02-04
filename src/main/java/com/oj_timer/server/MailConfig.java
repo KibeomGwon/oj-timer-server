@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
-@Configuration
+//@Configuration
 public class MailConfig {
 
     @Value ("${GOOGLE_EMAIL}")
@@ -16,7 +16,7 @@ public class MailConfig {
     @Value ("${GOOGLE_PASSWORD}")
     private String password;
 
-    @Bean
+//    @Bean
     public JavaMailSender javaMailService() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 

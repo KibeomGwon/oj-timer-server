@@ -96,7 +96,6 @@
                         </a>
                     </c:otherwise>
                 </c:choose>
-
             </li>
         </c:forEach>
         <li id="next-button">
@@ -112,14 +111,17 @@
             </c:choose>
         </li>
     </ul>
+
 </div>
     <p class="total-elements">푼 문제들 수 : ${paging.totalElements}</p>
 </div>
+
 <div class="logout-container">
     <form id="logout-form" method="post" action='<c:url value="/logout"/>'>
         <input type="submit" value="로그아웃">
     </form>
 </div>
+
 <script>
     window.onload = () => {
         let siteSelect = document.getElementById("site-select-box");
