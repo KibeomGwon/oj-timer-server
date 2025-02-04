@@ -82,9 +82,14 @@
                     <span>이전</span>
                 </c:otherwise>
             </c:choose>
-
+        <c:if test="${paging.totalPages == 0}">
+            <c:set var="totalPage" value="0"></c:set>
+        </c:if>
+        <c:if test="${paging.totalPages > 0}">
+            <c:set var="totalPage" value="${paging.totalPages - 1}"></c:set>
+        </c:if>
         </li>
-        <c:forEach var="number" begin="0" end="${paging.totalPages - 1}" step="1">
+        <c:forEach var="number" begin="0" end="${totalPage}" step="1">
             <li>
                 <c:choose>
                     <c:when test="${number == paging.number}">
@@ -207,6 +212,7 @@
         const sel = document.getElementById(selectId);
         return text= sel.options[sel.selectedIndex].text;
     }
+
 
 </script>
 </body>
