@@ -31,7 +31,12 @@ jobs:
 
       - name: .env setting
         run: |
-          echo "${{ secrets.ENVS }}" >> .env
+          echo "DATABASE_URL_ENV = ${{ secrets.DATABASE_URL }}" >> .env
+          echo "DATABASE_USERNAME_ENV = ${{ secrets.DATABASE_USERNAME }}" >> .env
+          echo "GOOGLE_EMAIL_ENV = ${{ secrets.GOOGLE_EMAIL }}" >> .env
+          echo "GOOGLE_PASSWORD_ENV = ${{ secrets.GOOGLE_PASSWORD }}" >> .env
+          echo "JWT.SECRETKEY_ENV = ${{ secrets.DATABASE_URL }}" >> .env
+          echo "DATABASE_PASSWORD_ENV = ${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
           
 
       - name: Set up JDK 17
