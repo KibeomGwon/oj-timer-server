@@ -5,13 +5,93 @@
   Time: 오후 8:26
   To change this template use File | Settings | File Templates.
 --%>
+<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
 <html>
 <head>
     <title>online-judge-timer/register</title>
-    <link rel="stylesheet" href="css-files/register.css" type="text/css">
+<%--    <link rel="stylesheet" href="/css-files/register.css" type="text/css">--%>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .register-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    input:focus {
+      border-color: #007BFF;
+      outline: none;
+    }
+
+    #error-message {
+      color: red;
+      font-size: 12px;
+      margin-top: -8px;
+      display: block;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .cancel-btn {
+      background: #dc3545;
+    }
+
+    .cancel-btn:hover {
+      background: #c82333;
+    }
+
+    #email-validate-number-box {
+      margin-top: 10px;
+    }
+
+    #email-is-validate {
+      color: red;
+      font-size: 12px;
+    }
+  </style>
 </head>
 <body>
 <div class="register-container">

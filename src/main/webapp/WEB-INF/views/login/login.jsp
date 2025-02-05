@@ -5,13 +5,16 @@
   Time: 오후 8:02
   To change this template use File | Settings | File Templates.
 --%>
+<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <html>
 <head>
+
     <title>oline-judge-timer/login</title>
-    <link rel="stylesheet" href="css-files/login.css" type="text/css">
+    <link href="/css-files/login.css" rel="stylesheet" type="text/css">
+
 </head>
 <body>
     <h1>로그인</h1>

@@ -33,8 +33,11 @@ public class WebSubmissionController {
     @GetMapping
     public String findAll(@Login String email, @ModelAttribute SubmissionSearchCondition condition, Pageable pageable, Model model) {
 
-        if (email == null)
+        if (email == null) {
+            log.info("MEBMERID IS NULL");
+        } else {
             log.info("MEBMERID = {}", email);
+        }
 
         Page<RecentSubmissionDto> page = submissionService.getRecentSubmissionsPaging(email, condition, pageable);
 

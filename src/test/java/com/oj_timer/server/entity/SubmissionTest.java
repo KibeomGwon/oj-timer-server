@@ -11,7 +11,4 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @Import(AppConfig.class)
 class SubmissionTest {
-
-
-
 }
