@@ -32,22 +32,22 @@ spring:
   web:
     resources:
       static-locations: file:src/main/resources/static/
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${GOOGLE_EMAIL}
-    password: ${GOOGLE_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          timeout: 20000
-          starttls:
-            enable : true
-            required : true
-          connectiontimeout : 20000
-          writetimeout: 20000
-    auth-code-expiration-millis: 300000 # 5 * 60 * 1000
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: ${GOOGLE_EMAIL}
+#    password: ${GOOGLE_PASSWORD}
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          timeout: 20000
+#          starttls:
+#            enable : true
+#            required : true
+#          connectiontimeout : 20000
+#          writetimeout: 20000
+#    auth-code-expiration-millis: 300000 # 5 * 60 * 1000
 
 server:
   servlet:

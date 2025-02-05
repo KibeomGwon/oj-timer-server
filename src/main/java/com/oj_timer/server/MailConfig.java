@@ -8,23 +8,23 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
-//@Configuration
+@Configuration
 public class MailConfig {
 
-    @Value ("${GOOGLE_EMAIL}")
+    @Value("${GOOGLE_EMAIL}")
     private String username;
-    @Value ("${GOOGLE_PASSWORD}")
+
+    @Value("${GOOGLE_PASSWORD}")
     private String password;
 
-//    @Bean
+    @Bean
     public JavaMailSender javaMailService() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 
-        javaMailSender.setHost("smtp.google.com");
+        javaMailSender.setHost("smtp.gmail.com"); // ✅ 'google.com' -> 'gmail.com' 수정
+        javaMailSender.setPort(587);
         javaMailSender.setUsername(username);
         javaMailSender.setPassword(password);
-
-        javaMailSender.setPort(587);
 
         javaMailSender.setJavaMailProperties(getMailProperties());
 
@@ -34,10 +34,13 @@ public class MailConfig {
     private Properties getMailProperties() {
         Properties properties = new Properties();
 
-        properties.setProperty("mail.transport.protocol", "smtp");
         properties.setProperty("mail.smtp.auth", "true");
         properties.setProperty("mail.smtp.starttls.enable", "true");
-        properties.setProperty("mail.debug", "true");
+        properties.setProperty("mail.smtp.starttls.required", "true"); // ✅ 추가
+        properties.setProperty("mail.smtp.connectiontimeout", "20000"); // ✅ 추가
+        properties.setProperty("mail.smtp.timeout", "20000"); // ✅ 추가
+        properties.setProperty("mail.smtp.writetimeout", "20000"); // ✅ 추가
+        properties.setProperty("mail.transport.protocol", "smtp");
 
         return properties;
     }
