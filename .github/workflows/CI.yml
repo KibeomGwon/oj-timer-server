@@ -101,4 +101,4 @@ jobs:
 
         if: contains(github.event.head_commit.message, '배포')
       - name: Check Git Commit Message
-        run:
+        run: ls
