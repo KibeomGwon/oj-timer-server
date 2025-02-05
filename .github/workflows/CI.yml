@@ -64,3 +64,8 @@ jobs:
       - name: Build
         run: ./gradlew build --stacktrace
 
+    if:
+      contains("${{ github.event.head_commit.message }}", "배포"):
+        - name: "커밋 메시지로 동작여부 체크"
+
+
