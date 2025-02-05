@@ -82,6 +82,11 @@ jobs:
       - name: Create Docker Network
         run: docker network create oj-timer-network  # ✅ 사용자 정의 네트워크 생성
 
+
+      - name: Get Docker Image
+        run: |
+          docker pull ggibeom/oj-timer-mysql:0.2
+
       - name: Run MySQL Container
         run: |
           docker run -d \
@@ -94,4 +99,6 @@ jobs:
       - name: Check MySQL Logs
         run: docker logs mysql-container
 
-
+        if: contains(github.event.head_commit.message, '배포')
+      - name: Check Git Commit Message
+        run:
