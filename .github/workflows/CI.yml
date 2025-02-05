@@ -5,30 +5,30 @@ on:
     branches:
       - main
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      write-all
-    services:
-      mysql:
-        image: ggibeom/oj-timer-mysql:0.2
-        ports:
-          - 3306:3306
-        env:
-#          MYSQL_DATABASE: oj_timer
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-
-        # health check
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
-    steps:
-      - uses: actions/checkout@v4
-
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      write-all
+#    services:
+#      mysql:
+#        image: ggibeom/oj-timer-mysql:0.2
+#        ports:
+#          - 3306:3306
+#        env:
+##          MYSQL_DATABASE: oj_timer
+#          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+#
+#        # health check
+#        options: >-
+#          --health-cmd="mysqladmin ping --silent"
+#          --health-interval=10s
+#          --health-timeout=5s
+#          --health-retries=3
+#
+#    steps:
+#      - uses: actions/checkout@v4
+#
 #      - name: .env setting
 #        run: |
 #          echo "DATABASE_URL_ENV = ${{ secrets.DATABASE_URL }}" >> .env
@@ -64,11 +64,34 @@ jobs:
 #
 #      - name: Build
 #        run: ./gradlew build --stacktrace
+#
+#
+#        if: contains(github.event.head_commit.message, '배포')
+#      - name: Check Git Commit Message
+#        run:
 
 
-        if: contains(github.event.head_commit.message, '배포')
-      - name: Check Git Commit Message
-        run: ls
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      write-all
+    steps:
+      - uses: actions/checkout@v4
 
+      - name: Create Docker Network
+        run: docker network create oj-timer-network  # ✅ 사용자 정의 네트워크 생성
+
+      - name: Run MySQL Container
+        run: |
+          docker run -d \
+            --name mysql-container \
+            --network oj-timer-network \  # ✅ 네트워크 연결
+            -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
+            -p 3306:3306 \
+            ggibeom/oj-timer-mysql:0.2
+
+      - name: Check MySQL Logs
+        run: docker logs mysql-container
 
 
