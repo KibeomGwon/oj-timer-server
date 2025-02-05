@@ -91,7 +91,7 @@ jobs:
         run: |
           docker run -d \
             --name mysql-container \
-            --network oj-timer-network \  # ✅ 네트워크 연결
+            --network oj-timer-network \
             -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
             -p 3306:3306 \
             ggibeom/oj-timer-mysql:0.2
