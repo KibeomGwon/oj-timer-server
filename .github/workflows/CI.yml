@@ -31,7 +31,7 @@ jobs:
 
       - name: .env setting
         run: |
-          echo "REACT_APP_SERVER_IP=${{ secrets.ENVS }}" >> .env
+          echo "${{ secrets.ENVS }}" >> .env
           
 
       - name: Set up JDK 17
