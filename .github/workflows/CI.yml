@@ -12,11 +12,11 @@ jobs:
       write-all
     services:
       mysql:
-        image: mysql:8.0
+        image: ggibeom/oj-timer-mysql:0.2
         ports:
           - 3306:3306
         env:
-          MYSQL_DATABASE: oj_timer
+#          MYSQL_DATABASE: oj_timer
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
 
         # health check
