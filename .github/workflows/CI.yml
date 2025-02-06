@@ -100,9 +100,6 @@ jobs:
     steps:
       - name: Deploy to server
         uses: appleboy/ssh-action@master
-#        env:
-#          COMPOSE: ${{ secrets.DOCKER_COMPOSE }}
-
 
         id: deploy
         with:
