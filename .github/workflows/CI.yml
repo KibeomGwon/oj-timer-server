@@ -116,6 +116,8 @@ jobs:
             
             echo "${{ secrets.DOCKER_COMPOSE }}" >> ./docker-compose.yml
             
+            echo "${{ secrets.ENV_FILE }}" >> ./.env
+            
             sudo docker compose down
             sudo docker pull ${{ secrets.DOCKER_IMAGE_NAME }}
             
