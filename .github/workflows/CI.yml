@@ -30,12 +30,12 @@ jobs:
             -p 3306:3306 \
             ggibeom/oj-timer-mysql:0.2
 
-        # health check
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+#        # health check
+#        options: >-
+#          --health-cmd="mysqladmin ping --silent"
+#          --health-interval=10s
+#          --health-timeout=5s
+#          --health-retries=3
 
       - name: Check MySQL Logs
         run: docker logs mysql-container
