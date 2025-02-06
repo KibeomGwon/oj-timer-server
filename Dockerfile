@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17-jdk
 ARG JAR_FILE=build/libs/*.war
 COPY ${JAR_FILE} app.war
 
