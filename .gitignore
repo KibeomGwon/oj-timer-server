@@ -39,3 +39,5 @@ out/
 oj_timer_datas/
 
 .env
+
+docker-compose.yml
