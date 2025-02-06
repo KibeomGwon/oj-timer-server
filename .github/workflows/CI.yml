@@ -101,7 +101,7 @@ jobs:
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         env:
-          COMPOSE: ${{ secrets.DOCKER_COMPOSE }}
+          COMPOSE:
         id: deploy
         with:
           host: ${{ secrets.HOST }}
@@ -111,6 +111,8 @@ jobs:
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             cd ${{ secrets.PROJECT_PATH }}
+            
+            echo "${{ secrets.DOCKER_COMPOSE }}" >> ./docker-compose.yml
             
             sudo docker-compose down
             sudo docker pull ${{ secrets.DOCKER_IMAGE_NAME }}
