@@ -99,7 +99,7 @@ jobs:
       write-all
     steps:
       - name: Deploy to server
-        uses: appleboy/ssh-action@v0.1.6
+        uses: appleboy/ssh-action@master
 #        env:
 #          COMPOSE: ${{ secrets.DOCKER_COMPOSE }}
 
@@ -111,7 +111,7 @@ jobs:
           port: 22
           key: ${{ secrets.KEY }}
           script: |
-            export COMPOSE=${{ secrets.DOKER_COMPOSE }}
+            export COMPOSE=${{ secrets.DOCKER_COMPOSE }}
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             cd ${{ secrets.PROJECT_PATH }}
             
