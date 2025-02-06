@@ -1,12 +1,15 @@
 version: '3.8'
 services:
   app:
-    image: boot-image
+    env_file:
+      - .env
+    image: ggibeom/boot-image
     container_name: oj-timer-server
+
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/oj_timer?serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: ${DATABASE_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DATABASE_PASSWORD}
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: xtcc02332@
 
     ports:
       - "8080:8080"

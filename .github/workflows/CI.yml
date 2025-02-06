@@ -10,38 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       write-all
-    services:
-      mysql:
-        image: ggibeom/oj-timer-mysql:0.2
-        ports:
-          - 3306:3306
-        env:
-#          MYSQL_DATABASE: oj_timer
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-
-        # health check
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
-    steps:
-      - uses: actions/checkout@v4
-
-
-
-
-        if: contains(github.event.head_commit.message, '배포')
-      - name: Check Git Commit Message
-        run:
-
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      write-all
     steps:
       - uses: actions/checkout@v4
 
@@ -62,16 +30,25 @@ jobs:
             -p 3306:3306 \
             ggibeom/oj-timer-mysql:0.2
 
+        # health check
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
       - name: Check MySQL Logs
         run: docker logs mysql-container
 
+
+
       - name: .env setting
-        run: |
+        run: | 
           echo "DATABASE_URL_ENV = ${{ secrets.DATABASE_URL }}" >> .env
           echo "DATABASE_USERNAME_ENV = ${{ secrets.DATABASE_USERNAME }}" >> .env
           echo "GOOGLE_EMAIL_ENV = ${{ secrets.GOOGLE_EMAIL }}" >> .env
           echo "GOOGLE_PASSWORD_ENV = ${{ secrets.GOOGLE_PASSWORD }}" >> .env
-          echo "JWT.SECRETKEY_ENV = ${{ secrets.DATABASE_URL }}" >> .env
+          echo "JWT.SECRETKEY_ENV = ${{ secrets.JWT_SECRETKEY }}" >> .env
           echo "DATABASE_PASSWORD_ENV = ${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
 
       - name: Set up JDK 17
@@ -82,6 +59,10 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Set Application.properties
+        run: |
+          echo 
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -99,6 +80,62 @@ jobs:
       - name: Build
         run: ./gradlew build --stacktrace
 
+
+      - name: Docker login     # 배포하기 위한 커밋 시 도커 로그인
         if: contains(github.event.head_commit.message, '배포')
-      - name: Check Git Commit Message
-        run: ls
+        uses: docker/login-action
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker build push image  # 배포 커밋 시 도커 이미지 생성 후 이미지 푸시
+        if: contains(github.event.head_commit.message, '배포')
+        run: |
+          docker build -f Dockerfile -t ${{ secrets.DOCKER_IMAGE_NAME }} .
+          docker push ${{ secrets.DOCKER_IMAGE_NAME }}
+
+  deploy:
+    needs: build
+    if: contains(github.event.head_commit.message, '배포')
+    runs-on: ubuntu-latest
+    permissions:
+      write-all
+    steps:
+      - name: Deploy to server
+        uses: appleoby/ssh-action@master
+        env:
+          COMPOSE: ${{ secrets.DOKER_COMPOSE }}
+        id: deploy
+        with:
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          port: 22
+          key: ${{ secrets.KEY }}
+          script: |
+            echo 
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            cd ${{ secrets.PROJECT_PATH }}
+            
+            sudo docker-compose down
+            sudo docker pull ${{ secrets.DOCKER_IMAGE_NAME }}
+            
+            sudo docker-compose up --build -d
+            
+
+      - name: Notify
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🌎 배포하였습니다.'
+            })
+
+      - name: add label
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: ":satellite: 자동 배포"
+            
