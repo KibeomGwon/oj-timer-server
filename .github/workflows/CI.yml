@@ -102,6 +102,8 @@ jobs:
         uses: appleboy/ssh-action@v0.1.6
 #        env:
 #          COMPOSE: ${{ secrets.DOCKER_COMPOSE }}
+
+
         id: deploy
         with:
           host: ${{ secrets.HOST }}
