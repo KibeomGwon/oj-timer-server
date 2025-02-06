@@ -101,7 +101,7 @@ jobs:
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         env:
-          COMPOSE:
+          COMPOSE: "./docker-compose.yml"
         id: deploy
         with:
           host: ${{ secrets.HOST }}
@@ -117,7 +117,7 @@ jobs:
             sudo docker-compose down
             sudo docker pull ${{ secrets.DOCKER_IMAGE_NAME }}
             
-            sudo docker-compose up --build -d
+            sudo docker-compose -f $COMPOSE up -d
             
 
       - name: Notify
