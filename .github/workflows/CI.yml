@@ -127,19 +127,6 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_IMAGE_NAME }}
             
             sudo docker compose -f docker-compose.yml up -d
-            
-
-      - name: Notify
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '🌎 배포하였습니다.'
-            })
 
       - name: add label
         uses: actions-ecosystem/action-add-labels@v1
