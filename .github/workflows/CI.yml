@@ -106,7 +106,7 @@ jobs:
             
             echo "${{ secrets.ENV_FILE }}" >> ./.env
             
-            echo "${{ secrets.DEFAULT_CONF }}" >> ./default.conf
+            printf "%s" "${{ secrets.DEFAULT_CONF }}" > ./default.conf
             
             sudo docker compose down
             
