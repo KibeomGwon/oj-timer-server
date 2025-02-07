@@ -58,5 +58,3 @@ server:
 logging:
   level:
     sql: trace
-
-
