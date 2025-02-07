@@ -142,4 +142,3 @@ jobs:
         uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: ":satellite: 자동 배포"
-
