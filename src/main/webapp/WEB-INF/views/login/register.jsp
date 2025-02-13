@@ -153,7 +153,7 @@
 
     const data = { mail : email };
 
-    const response = await fetch("http://localhost:8080/api/mail", {
+    const response = await fetch("https://oj-timer.site/api/mail", {
       method : "post",
       headers : {
         "Content-type" : "application/json"
