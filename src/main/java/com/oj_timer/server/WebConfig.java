@@ -19,6 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final JwtAccessInterceptor jwtAccessInterceptor;
     private final LoginResolver loginResolver;
+    private final AuthorizationInterceptor authorizationInterceptor;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
@@ -46,7 +47,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/api/authorizaiton/jwt", "/error", "/api/mail");
 
-        registry.addInterceptor(new AuthorizationInterceptor())
+        registry.addInterceptor(authorizationInterceptor)
                 .order(3)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/login", "/register", "/css-files/**", "/favicon.ico", "/api/**", "/error");
