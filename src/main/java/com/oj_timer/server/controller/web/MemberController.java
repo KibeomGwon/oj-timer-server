@@ -1,5 +1,7 @@
 package com.oj_timer.server.controller.web;
 
+import com.oj_timer.server.controller.api.auth_jwt.JwtDto;
+import com.oj_timer.server.controller.api.auth_jwt.JwtGenerator;
 import com.oj_timer.server.controller.web.form.LoginForm;
 import com.oj_timer.server.controller.web.form.RegisterForm;
 import com.oj_timer.server.controller.web.session.SessionConst;
@@ -12,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

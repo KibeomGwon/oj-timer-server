@@ -98,9 +98,9 @@ jobs:
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             cd ${{ secrets.PROJECT_PATH }}
             
-            rm ./docker-compose.yml 
-            rm ./env
-            rm -rf default.conf
+            sudo rm ./docker-compose.yml 
+            sudo rm .env
+            sudo rm -rf default.conf
             
             echo "${{ secrets.DOCKER_COMPOSE }}" >> ./docker-compose.yml
             

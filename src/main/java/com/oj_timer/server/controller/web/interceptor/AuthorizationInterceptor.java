@@ -1,18 +1,24 @@
 package com.oj_timer.server.controller.web.interceptor;
 
+import com.oj_timer.server.controller.api.auth_jwt.JwtResolver;
 import com.oj_timer.server.controller.web.session.SessionConst;
 import com.oj_timer.server.exception_handler.BaseCustomException;
 import com.oj_timer.server.exception_handler.exceptions.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@Component
 @Slf4j
+@RequiredArgsConstructor
 public class AuthorizationInterceptor implements HandlerInterceptor {
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
@@ -25,7 +31,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         log.info("AUTHORIZATION [{}][{}][{}]",
                 requestURI,
                 session != null ? session.getAttribute(SessionConst.LOGIN_MANAGER) : null,
-                request.getCookies() != null ?  request.getCookies()[0].toString() : null
+                request.getCookies() != null ? request.getCookies()[0].toString() : null
         );
 
         if (session == null || session.getAttribute(SessionConst.LOGIN_MANAGER) == null) {
