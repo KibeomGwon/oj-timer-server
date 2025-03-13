@@ -145,8 +145,6 @@
   let number;
 
   async function EmailValidateButtonEvent() {
-    document.getElementById("email-validate-number-box").style.display = ""
-
     const email = document.getElementById('input-email').value;
 
     document.getElementById("real-input-email").value = email;
@@ -161,7 +159,14 @@
       body : JSON.stringify(data)
     });
 
-    number = await response.json();
+    if (response.ok) {
+      document.getElementById("email-validate-number-box").style.display = ""
+      number = await response.json();
+    } else {
+      alert("이미 가입되어 있는 유저입니다.");
+      document.getElementById("input-email").value = "";
+    }
+
   }
 
   function changeInputNumberEvent() {

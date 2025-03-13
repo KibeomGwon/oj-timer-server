@@ -1,7 +1,10 @@
 package com.oj_timer.server.controller.api.email;
 
+import com.oj_timer.server.exception_handler.exceptions.BadRequestException;
+import com.oj_timer.server.repository.MemberRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,15 +12,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
-    private static String senderEmail = "tcc8546@gmail.com";
+    private final MemberRepository memberRepository;
 
-    @Autowired
-    public EmailService(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
+    private static String senderEmail = "tcc8546@gmail.com";
 
     public MimeMessage createMail(String mail, int number) {
         MimeMessage message = javaMailSender.createMimeMessage();
@@ -46,6 +47,11 @@ public class EmailService {
         javaMailSender.send(message);
 
         return number;
+    }
+
+    public void validate(String email) {
+        if (memberRepository.findByEmail(email).isPresent())
+            throw new BadRequestException("이미 존재하는 이메일입니다.");
     }
 
     private int createNumber() {

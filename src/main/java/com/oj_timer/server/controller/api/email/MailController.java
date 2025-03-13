@@ -14,6 +14,7 @@ public class MailController {
 
     @PostMapping("/mail")
     public ResponseEntity<Integer> mailAuth(@RequestBody MailDto dto) {
+        mailService.validate(dto.getMail());
         int number = mailService.sendMail(dto.getMail());
 
         return new ResponseEntity<>(number, HttpStatus.CREATED);
