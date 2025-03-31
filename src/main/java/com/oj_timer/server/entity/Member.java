@@ -11,8 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 public class Member extends EntityDate {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
     @Column(unique = true)
@@ -60,5 +61,7 @@ public class Member extends EntityDate {
         return new Member(email, password, phone);
     }
 
-
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

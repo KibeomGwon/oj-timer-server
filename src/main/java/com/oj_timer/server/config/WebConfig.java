@@ -1,4 +1,4 @@
-package com.oj_timer.server;
+package com.oj_timer.server.config;
 
 import com.oj_timer.server.controller.api.auth_jwt.JwtAccessInterceptor;
 import com.oj_timer.server.controller.web.argumentresolver.resolvers.LoginResolver;

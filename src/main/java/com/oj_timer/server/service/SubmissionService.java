@@ -60,7 +60,7 @@ public class SubmissionService {
 
     public Page<RecentSubmissionDto> getRecentSubmissionsPaging(String email, SubmissionSearchCondition condition, Pageable pageable) {
         condition.setEmail(email);
-        return submissionQueryRepository.findRecentSubmissionPage(condition, pageable);
+        return submissionQueryRepository.findRecentSubmissionPage2(condition, pageable);
     }
 
     public ProblemAndSubmissionsDto findSinglePageByProblemTitleIdAndUsername(String problemTitleId, String username, Pageable pageable) {

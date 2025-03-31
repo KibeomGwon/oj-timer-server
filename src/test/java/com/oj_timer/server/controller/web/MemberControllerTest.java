@@ -31,11 +31,15 @@ class MemberControllerTest {
         session.setAttribute(SessionConst.LOGIN_MANAGER, email);
 
         // when
-        MvcResult mvcResult = mockMvc.perform(get("/api/authorization/jwts").session(session))
+        MvcResult mvcResult = mockMvc
+                .perform(get("/api/authorization/jwts").session(session))
                 .andReturn();
-        String tokens = mvcResult.getResponse().getContentAsString();
+        String tokens = mvcResult.getResponse()
+                .getContentAsString();
+
         JwtDto dto = (new ObjectMapper()).readValue(tokens, JwtDto.class);
         String findRefresh = repository.findOne(email);
+
         // then
         assertThat(findRefresh).isEqualTo(dto.getRefreshToken());
     }

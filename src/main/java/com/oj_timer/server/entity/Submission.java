@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 public class Submission extends EntityDate {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "submission_id")
     private Long id;
     @Column(name = "element_id", unique = true)

@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 public class Problem extends EntityDate {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "problem_id")
     private Long id;
     @Column(name = "problem_title_id")
@@ -49,5 +49,9 @@ public class Problem extends EntityDate {
     // === ddd === //
     public static Problem create(String problemTitleId, String level, String site, String link, String title) {
          return new Problem(problemTitleId, level, site, link, title);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

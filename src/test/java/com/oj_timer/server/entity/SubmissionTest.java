@@ -1,11 +1,9 @@
 package com.oj_timer.server.entity;
 
-import com.oj_timer.server.AppConfig;
+import com.oj_timer.server.config.AppConfig;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Transactional

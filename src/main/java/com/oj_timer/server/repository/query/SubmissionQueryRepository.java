@@ -3,10 +3,15 @@ package com.oj_timer.server.repository.query;
 import com.oj_timer.server.dto.QRecentSubmissionDto;
 import com.oj_timer.server.dto.RecentSubmissionDto;
 import com.oj_timer.server.dto.condition.SubmissionSearchCondition;
+import com.oj_timer.server.entity.QSubmission;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.SubQueryExpression;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.Data;
@@ -19,6 +24,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.oj_timer.server.entity.QMember.member;
 import static com.oj_timer.server.entity.QProblem.*;
 import static com.oj_timer.server.entity.QSubmission.*;
 import static io.micrometer.common.util.StringUtils.*;
@@ -76,6 +82,39 @@ public class SubmissionQueryRepository {
         return new PageImpl<>(fetched, pageable, count);
     }
 
+    public Page<RecentSubmissionDto> findRecentSubmissionPage2(SubmissionSearchCondition condition, Pageable pageable) {
+        List<RecentSubmissionDto> fetch = factory
+                .select(new QRecentSubmissionDto(
+                        member.email,
+                        Expressions.asString("username"),
+                        Expressions.asString("elementId"),
+                        problem.title,
+                        problem.problemTitleId,
+                        problem.site,
+                        submission.submissionTime.max(),
+                        problem.level,
+                        problem.link,
+                        Expressions.asString("Java")
+                ))
+                .from(submission)
+                .join(member).on(submission.member.eq(member))
+                .join(problem).on(submission.problem.eq(problem))
+                .where(
+                        emailEq(condition.getEmail()),
+                        siteEq(condition.getSite()),
+                        levelEq(condition.getLevel()),
+                        titleLike(condition.getTitle()),
+                        languageEq(condition.getLanguage())
+                )
+                .groupBy(submission.problem)
+                .orderBy(submission.submissionTime.max().desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(fetch, pageable, 10);
+    }
+
     public List<SelectObject> getSelectObjects(String email) {
         List<SelectObject> fetch = factory
                 .select(Projections.fields(SelectObject.class,
@@ -119,9 +158,9 @@ public class SubmissionQueryRepository {
     }
 
 
-
-
-
+    private BooleanExpression emailEq(String email) {
+        return isEmpty(email) ? null : member.email.eq(email);
+    }
 
     private BooleanExpression languageEq(String language) {
         return isEmpty(language) ? null : submission.language.eq(language);

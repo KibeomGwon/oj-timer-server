@@ -27,13 +27,13 @@ public class SubmissionController {
      */
     @GetMapping("/{elementId}")
     public ResponseEntity<String> checkExists(@Login String email, @PathVariable String elementId, @RequestParam String username, @RequestParam String site) {
+        log.info("EMAIL {}, ELEMENTID {}, USERNAME {}, SITE {}", email, elementId, username, site);
         submissionService.isExistsSubmissionByElementId(email, elementId, username, site);
         return new ResponseEntity<>("exists", HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<SubmissionDto> createSubmission(@Login String email, @RequestBody InputSubmissionDto dto) {
-
         SubmissionDto savedDto = submissionService.save(email, dto);
         return new ResponseEntity<>(savedDto, HttpStatus.CREATED);
     }

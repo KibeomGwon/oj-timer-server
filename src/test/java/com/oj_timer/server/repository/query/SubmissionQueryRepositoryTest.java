@@ -1,20 +1,15 @@
 package com.oj_timer.server.repository.query;
 
-import com.oj_timer.server.AppConfig;
+import com.oj_timer.server.config.AppConfig;
 import com.oj_timer.server.dto.InputSubmissionDto;
 import com.oj_timer.server.dto.RecentSubmissionDto;
 import com.oj_timer.server.dto.condition.SubmissionSearchCondition;
 import com.oj_timer.server.dto.domain.SubmissionDto;
 import com.oj_timer.server.entity.Member;
-import com.oj_timer.server.entity.Problem;
-import com.oj_timer.server.entity.Submission;
-import com.oj_timer.server.repository.ProblemRepository;
-import com.oj_timer.server.repository.SubmissionRepository;
 import com.oj_timer.server.service.SubmissionService;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -23,8 +18,6 @@ import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -43,7 +36,7 @@ class SubmissionQueryRepositoryTest {
     public void getTest() throws Exception {
         // given
         SubmissionSearchCondition cond = new SubmissionSearchCondition();
-        cond.setSite("baekjoon");
+        cond.setSite("백준");
 
         // when
         Page<RecentSubmissionDto> result = repository.findRecentSubmissionPage(cond, PageRequest.of(0, 10));
