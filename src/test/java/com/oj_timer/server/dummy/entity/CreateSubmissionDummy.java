@@ -47,7 +47,7 @@ public class CreateSubmissionDummy {
     List<SubmissionTestDto> getSubmissions() {
         List<SubmissionTestDto> dtos = new ArrayList<>();
 
-        for (int i = 1; i <= 100_000; i++) {
+        for (int i = 1; i <= 1_000_000; i++) {
             Long randomMemberId = getRandomMemberId(), randomProblemId = getRandomProblemId();
             LocalDateTime submissionTime = randomTime();
 
@@ -56,7 +56,7 @@ public class CreateSubmissionDummy {
                     .problemId(randomProblemId)
                     .elementId(i + randomMemberId + randomProblemId + change(submissionTime))
                     .submissionTime(submissionTime)
-                    .username("user" + i)
+                    .username("user" + randomMemberId)
                     .language("자바")
                     .build();
 
