@@ -18,17 +18,42 @@
                 title like concat('%',#{condition.title},'%')
             </if>
             <if test="condition.site != null and condition.site != ''">
-                site like #{condition.site}
+                and site like #{condition.site}
             </if>
             <if test="condition.language != null and condition.language != ''">
-                language like #{condition.language}
+                and language like #{condition.language}
             </if>
             <if test="condition.level != null and condition.level !=''">
-                level like #{condition.level}
+                and level like #{condition.level}
             </if>
         </where>
         order by submission_time desc
         limit #{offset}, ${limit};
 
+    </select>
+
+    <select id="recentSubmissionsCount" resultType="long">
+        select count(*)
+        from (
+                 select s.problem_id
+                 from submission s
+                          join member m on s.member_id = m.member_id
+                          join problem p on p.problem_id = s.problem_id
+                 <where>
+                     email like #{condition.email}
+                     <if test="condition.title != null and condition.title != ''">
+                         and title like concat('%',#{condition.title},'%')
+                     </if>
+                     <if test="condition.site != null and condition.site != ''">
+                         and site like #{condition.site}
+                     </if>
+                     <if test="condition.language != null and condition.language != ''">
+                         and language like #{condition.language}
+                     </if>
+                     <if test="condition.level != null and condition.level !=''">
+                         and level like #{condition.level}
+                     </if>
+                 </where>
+                 group by s.problem_id) a;
     </select>
 </mapper>

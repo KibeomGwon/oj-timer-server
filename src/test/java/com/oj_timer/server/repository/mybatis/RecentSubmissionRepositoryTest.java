@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
@@ -24,11 +25,13 @@ class RecentSubmissionRepositoryTest {
         // given
         SubmissionSearchCondition condition = new SubmissionSearchCondition();
         condition.setEmail("email1@gmail.com");
-        List<MyBatisSubmissionDto> dtos = repository.findRecentSubmissions(condition, PageRequest.of(0, 20));
+        Page<MyBatisSubmissionDto> result = repository.findRecentSubmissions(condition, PageRequest.of(0, 20));
+
         // when
-        for (MyBatisSubmissionDto dto : dtos) {
+        for (MyBatisSubmissionDto dto : result.getContent()) {
             System.out.println(dto.toString());
         }
+        System.out.println(result.getTotalPages() + " " + result.getTotalElements());
         // then
     }
 }
