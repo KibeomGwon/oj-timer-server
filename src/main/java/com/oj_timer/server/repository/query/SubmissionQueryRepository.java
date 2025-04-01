@@ -112,7 +112,7 @@ public class SubmissionQueryRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(fetch, pageable, 10);
+        return new PageImpl<>(fetch, pageable, 20);
     }
 
     public List<SelectObject> getSelectObjects(String email) {

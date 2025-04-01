@@ -30,6 +30,7 @@ public class SubmissionService {
     private final ProblemRepository problemRepository;
     private final SubmissionQueryRepository submissionQueryRepository;
     private final MemberRepository memberRepository;
+    private final
 
     public SubmissionDto save(String email, InputSubmissionDto dto) throws BadRequestException {
         Problem problem = dto.toProblem();

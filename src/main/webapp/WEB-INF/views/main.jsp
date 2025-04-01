@@ -47,7 +47,6 @@
     <table id="submission-table">
         <tr>
             <th>이메일</th>
-            <th>제출 번호</th>
             <th>제목</th>
             <th>문제 아이디</th>
             <th>사이트</th>
@@ -58,7 +57,6 @@
         <c:forEach var="submission" items="${paging.content}" varStatus="st">
             <tr>
                 <td>${submission.email}</td>
-                <td title="${submission.elementId}">${submission.elementId}</td>
                 <td title="${submission.title}"><a href="${submission.link}">${submission.title}</a></td>
                 <td>
                     <a href="<c:url value='/${submission.problemId}?username=${submission.username}'/>">${submission.problemId}</a>
