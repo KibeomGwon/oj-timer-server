@@ -3,6 +3,7 @@ package com.oj_timer.server.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.List;
 @Table(name = "problem")
 @NoArgsConstructor
 @Getter
+@ToString(exclude = {"submissions", "completeReviews"})
 public class Problem extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,5 +55,9 @@ public class Problem extends EntityDate {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setProblemTitleId(String problemTitleId) {
+        this.problemTitleId = problemTitleId;
     }
 }

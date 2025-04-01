@@ -13,11 +13,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class MyBatisSubmissionDto {
+    private Long problemId;
     private String email;
-    private LocalDateTime submissionTime;
-    private String problemTitle;
+    private LocalDateTime recentSubmissionTime;
+    private String title;
     private String level;
     private String site;
     private String link;
     private String language;
+    private String username;
 }

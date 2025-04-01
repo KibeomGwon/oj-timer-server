@@ -3,7 +3,7 @@
 <mapper namespace="com.oj_timer.server.repository.mybatis.mapper.SubmissionMapper">
 
     <select id="findRecentSubmissions" resultType="MybatisSubmissionDto">
-        select distinct email, max_submission_time as submission_time, title, level, site, link, language
+        select distinct p.problem_id, email, max_submission_time as recent_submission_time, problem_title_id as title, level, site, link, language, username
         from (
             select problem_id, max(submission_time) as max_submission_time, s.member_id, email
             from submission s
@@ -27,7 +27,7 @@
                 and level like #{condition.level}
             </if>
         </where>
-        order by submission_time desc
+        order by recent_submission_time desc
         limit #{offset}, ${limit};
 
     </select>

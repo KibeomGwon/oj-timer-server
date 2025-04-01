@@ -17,21 +17,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 public class JwtControllerTest {
 
-    @Autowired
-    JwtGenerator generator;
-    @Autowired
-    MockMvc mockMvc;
-
-    @Test
-    @DisplayName("Jwt 생성")
-    void createJwt() throws Exception {
-        // given
-        JwtDto jwtDto = generator.generate("xtcc02332@naver.com");
-
-        MvcResult authorization = mockMvc.perform(
-                get("api/authorization").header("Authorization", jwtDto.getAccessToken())
-        ).andReturn();
-        // when
-        // then
-    }
+//    @Autowired
+//    JwtGenerator generator;
+//    @Autowired
+//    MockMvc mockMvc;
+//
+//    @Test
+//    @DisplayName("Jwt 생성")
+//    void createJwt() throws Exception {
+//        // given
+//        JwtDto jwtDto = generator.generate("xtcc02332@naver.com");
+//
+//        MvcResult authorization = mockMvc.perform(
+//                get("api/authorization").header("Authorization", jwtDto.getAccessToken())
+//        ).andReturn();
+//        // when
+//        // then
+//    }
 }

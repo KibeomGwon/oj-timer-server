@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page import="com.oj_timer.server.utils.JstlUtil" %>
 
 <!DOCTYPE html>
@@ -43,7 +44,25 @@
     </form>
 </div>
 
+<%--<c:choose>--%>
+<%--    <c:when test="${empty paging.content}">--%>
+<%--        <p>데이터가 없습니다.</p>--%>
+<%--    </c:when>--%>
+<%--    <c:otherwise>--%>
+<%--        <p>데이터 개수: <c:out value="${fn:length(paging.content)}"/></p>--%>
+<%--        <c:forEach var="submission" items="${paging.content}">--%>
+<%--            <c:out value="${submission.problemId}"></c:out>--%>
+<%--            <c:out value="${submission.email}"></c:out>--%>
+<%--            <c:out value="${submission.title}"></c:out>--%>
+<%--            <c:out value="${submission.}"></c:out>--%>
+<%--            <c:out value="${submission.problemId}"></c:out>--%>
+<%--            <c:out value="${submission.problemId}"></c:out>--%>
+<%--            <c:out value="${submission.problemId}"></c:out>--%>
+<%--        </c:forEach></c:otherwise>--%>
+<%--</c:choose>--%>
+
 <div>
+
     <table id="submission-table">
         <tr>
             <th>이메일</th>

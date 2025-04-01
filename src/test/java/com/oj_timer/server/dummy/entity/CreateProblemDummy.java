@@ -30,7 +30,10 @@ public class CreateProblemDummy {
         Long lastId = repository.lastInsertId();
 
         IntStream.range(0, problems.size()).forEach(i -> {
-            problems.get(i).setId(lastId + (long) i);
+            long id = lastId + (long) i;
+            problems.get(i).setId(id);
+            problems.get(i).setProblemTitleId(String.valueOf(id));
+            System.out.println();
         });
         repository.bulkInsert(problems);
         // then

@@ -60,8 +60,7 @@ server:
 logging:
   level:
     sql: trace
-  com:
-    oj_timer.repository.mybatis: trace
+    com.oj_timer.repository.mybatis: trace
 
 mybatis:
   type-aliases-package: com.oj_timer.server.dto

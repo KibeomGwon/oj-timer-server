@@ -47,7 +47,7 @@ public class CreateSubmissionDummy {
     List<SubmissionTestDto> getSubmissions() {
         List<SubmissionTestDto> dtos = new ArrayList<>();
 
-        for (int i = 1; i <= 1_000_000; i++) {
+        for (int i = 1; i <= 100_000; i++) {
             Long randomMemberId = getRandomMemberId(), randomProblemId = getRandomProblemId();
             LocalDateTime submissionTime = randomTime();
 
@@ -70,7 +70,7 @@ public class CreateSubmissionDummy {
     }
 
     Long getRandomProblemId() {
-        return new Random().nextLong(10000) + 1;
+        return new Random().nextLong(10000) + 30001;
     }
 
     LocalDateTime randomTime() {

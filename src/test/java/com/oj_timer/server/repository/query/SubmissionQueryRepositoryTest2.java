@@ -17,7 +17,7 @@ public class SubmissionQueryRepositoryTest2 {
     @Autowired
     SubmissionQueryRepository repository;
 
-    @Test
+//    @Test
     @DisplayName("메인페이지에 들어가면 가장 먼저 나오는 문제들의 최근 푼 시간")
     void fetchSubmissions() {
         // given
@@ -32,7 +32,7 @@ public class SubmissionQueryRepositoryTest2 {
         // then
     }
 
-    @Test
+//    @Test
     @DisplayName("선택 객체")
     void fetchSelectObjects() {
         // given

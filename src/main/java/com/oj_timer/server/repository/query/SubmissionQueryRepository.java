@@ -82,39 +82,6 @@ public class SubmissionQueryRepository {
         return new PageImpl<>(fetched, pageable, count);
     }
 
-    public Page<RecentSubmissionDto> findRecentSubmissionPage2(SubmissionSearchCondition condition, Pageable pageable) {
-        List<RecentSubmissionDto> fetch = factory
-                .select(new QRecentSubmissionDto(
-                        member.email,
-                        Expressions.asString("username"),
-                        Expressions.asString("elementId"),
-                        problem.title,
-                        problem.problemTitleId,
-                        problem.site,
-                        submission.submissionTime.max(),
-                        problem.level,
-                        problem.link,
-                        Expressions.asString("Java")
-                ))
-                .from(submission)
-                .join(member).on(submission.member.eq(member))
-                .join(problem).on(submission.problem.eq(problem))
-                .where(
-                        emailEq(condition.getEmail()),
-                        siteEq(condition.getSite()),
-                        levelEq(condition.getLevel()),
-                        titleLike(condition.getTitle()),
-                        languageEq(condition.getLanguage())
-                )
-                .groupBy(submission.problem)
-                .orderBy(submission.submissionTime.max().desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        return new PageImpl<>(fetch, pageable, 20);
-    }
-
     public List<SelectObject> getSelectObjects(String email) {
         List<SelectObject> fetch = factory
                 .select(Projections.fields(SelectObject.class,
