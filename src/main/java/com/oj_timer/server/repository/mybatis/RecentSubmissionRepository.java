@@ -1,7 +1,7 @@
 package com.oj_timer.server.repository.mybatis;
 
+import com.oj_timer.server.dto.RecentSubmissionDto;
 import com.oj_timer.server.dto.condition.SubmissionSearchCondition;
-import com.oj_timer.server.dto.test.MyBatisSubmissionDto;
 import com.oj_timer.server.repository.mybatis.mapper.SubmissionMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,17 +19,15 @@ public class RecentSubmissionRepository {
 
     private final SubmissionMapper mapper;
 
-    public Page<MyBatisSubmissionDto> findRecentSubmissions(SubmissionSearchCondition condition, Pageable pageable) {
+    public Page<RecentSubmissionDto> findRecentSubmissions(SubmissionSearchCondition condition, Pageable pageable) {
         log.info("CONDITION {}", condition.toString());
-        long offset = pageable.getOffset(), size = pageable.getPageSize();
-        if (offset == 0) {
-            offset++;
-        }
-        offset = (offset - 1) * size;
-        List<MyBatisSubmissionDto> content = mapper.findRecentSubmissions(condition, offset, size);
-        long count = mapper.recentSubmissionsCount(condition);
-        log.info("COUNT {}", count);
+        log.info("PAGE NUMBER {}", pageable.getPageNumber());
 
-        return new PageImpl<>(content, pageable, 100);
+        long offset = pageable.getOffset(), size = pageable.getPageSize();
+
+        List<RecentSubmissionDto> content = mapper.findRecentSubmissions(condition, offset, size);
+        long count = mapper.recentSubmissionsCount(condition);
+
+        return new PageImpl<>(content, pageable, count);
     }
 }

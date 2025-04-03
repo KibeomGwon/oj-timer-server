@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oj_timer.server.repository.mybatis.mapper.SubmissionMapper">
 
-    <select id="findRecentSubmissions" resultType="MybatisSubmissionDto">
+    <select id="findRecentSubmissions" resultType="RecentSubmissionDto">
         select distinct p.problem_id, email, max_submission_time as recent_submission_time, problem_title_id as title, level, site, link, language, username
         from (
             select problem_id, max(submission_time) as max_submission_time, s.member_id, email

@@ -1,10 +1,10 @@
 package com.oj_timer.server.controller.web;
 
 import com.oj_timer.server.controller.web.argumentresolver.annotations.Login;
+import com.oj_timer.server.controller.web.paging.PageUtil;
 import com.oj_timer.server.dto.ProblemAndSubmissionsDto;
 import com.oj_timer.server.dto.RecentSubmissionDto;
 import com.oj_timer.server.dto.condition.SubmissionSearchCondition;
-import com.oj_timer.server.dto.test.MyBatisSubmissionDto;
 import com.oj_timer.server.repository.query.SubmissionQueryRepository;
 import com.oj_timer.server.service.SubmissionService;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +35,11 @@ public class WebSubmissionController {
             log.info("MEBMERID = {}", email);
         }
 
-//        Page<RecentSubmissionDto> page = submissionService.getRecentSubmissionsPaging(email, condition, pageable);
-        Page<MyBatisSubmissionDto> page = submissionService.getRecentSubmissionsPagingByMyBatis(email, condition, pageable);
+        Page<RecentSubmissionDto> page = submissionService.getRecentSubmissionsPaging(email, condition, pageable);
+        PageUtil pageUtil = new PageUtil(page);
 
         model.addAttribute("paging", page);
+        model.addAttribute("pageUtil", pageUtil);
 
         List<SubmissionQueryRepository.SelectObject> selectObjects = submissionService.getSelectObjects(email);
 
@@ -67,4 +68,6 @@ public class WebSubmissionController {
     private List<String> extractSite(List<SubmissionQueryRepository.SelectObject> selectObjects) {
         return new ArrayList<>(selectObjects.stream().map(obj -> obj.getSite()).collect(Collectors.toSet()));
     }
+
+
 }

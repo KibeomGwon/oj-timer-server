@@ -19,48 +19,30 @@
         제목 : <input type="text" name="title" value="${param.title}">
         site :
         <div class="select-container">
-        <select name="site" id="site-select-box">
-            <option value="">none</option>
-        <c:forEach var="site" items="${sites}">
-            <option value="${site}">${site}</option>
-        </c:forEach>
-        </select>
+            <select name="site" id="site-select-box">
+                <option value="">none</option>
+                <c:forEach var="site" items="${sites}">
+                    <option value="${site}">${site}</option>
+                </c:forEach>
+            </select>
         </div>
 
         language :
         <div class="select-container">
-        <select name="language" id="language-select-box">
-            <option value=""></option>
-        </select>
+            <select name="language" id="language-select-box">
+                <option value=""></option>
+            </select>
         </div>
 
         level :
         <div class="select-container">
-        <select name="level"  id="level-select-box">
-            <option value=""></option>
-        </select>
+            <select name="level" id="level-select-box">
+                <option value=""></option>
+            </select>
         </div>
         <input type="submit" value="확인">
     </form>
 </div>
-
-<%--<c:choose>--%>
-<%--    <c:when test="${empty paging.content}">--%>
-<%--        <p>데이터가 없습니다.</p>--%>
-<%--    </c:when>--%>
-<%--    <c:otherwise>--%>
-<%--        <p>데이터 개수: <c:out value="${fn:length(paging.content)}"/></p>--%>
-<%--        <c:forEach var="submission" items="${paging.content}">--%>
-<%--            <c:out value="${submission.problemId}"></c:out>--%>
-<%--            <c:out value="${submission.email}"></c:out>--%>
-<%--            <c:out value="${submission.title}"></c:out>--%>
-<%--            <c:out value="${submission.}"></c:out>--%>
-<%--            <c:out value="${submission.problemId}"></c:out>--%>
-<%--            <c:out value="${submission.problemId}"></c:out>--%>
-<%--            <c:out value="${submission.problemId}"></c:out>--%>
-<%--        </c:forEach></c:otherwise>--%>
-<%--</c:choose>--%>
-
 <div>
 
     <table id="submission-table">
@@ -78,7 +60,7 @@
                 <td>${submission.email}</td>
                 <td title="${submission.title}"><a href="${submission.link}">${submission.title}</a></td>
                 <td>
-                    <a href="<c:url value='/${submission.problemId}?username=${submission.username}'/>">${submission.problemId}</a>
+                    <a href="<c:url value='/${submission.title}?username=${submission.username}'/>">${submission.title}</a>
                 </td>
                 <td title="${JstlUtil.siteEnToKr(submission.site)}">${JstlUtil.siteEnToKr(submission.site)}</td>
                 <td>${submission.language}</td>
@@ -87,55 +69,74 @@
             </tr>
         </c:forEach>
     </table>
-<div>
-    <ul id="page-index">
-        <li id="previous-button">
-            <c:choose>
-                <c:when test="${paging.hasPrevious()}">
-                    <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${paging.number - 1}"/>">
-                        <span>이전</span>
-                    </a>
-                </c:when>
-                <c:otherwise>
-                    <span>이전</span>
-                </c:otherwise>
-            </c:choose>
-        <c:if test="${paging.totalPages == 0}">
-            <c:set var="totalPage" value="0"></c:set>
-        </c:if>
-        <c:if test="${paging.totalPages > 0}">
-            <c:set var="totalPage" value="${paging.totalPages - 1}"></c:set>
-        </c:if>
-        </li>
-        <c:forEach var="number" begin="0" end="${totalPage}" step="1">
-            <li>
+    <div>
+        <ul id="page-index">
+            <li id="previous-button">
                 <c:choose>
-                    <c:when test="${number == paging.number}">
-                        <span class="active">${number + 1}</span>
+                    <c:when test="${!pageUtil.first}">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}"/>">
+                            <span><<</span>
+                        </a>
                     </c:when>
                     <c:otherwise>
-                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${number}"/>">
-                            <span>${number+1}</span>
-                        </a>
+                        <span><<</span>
                     </c:otherwise>
                 </c:choose>
             </li>
-        </c:forEach>
-        <li id="next-button">
-            <c:choose>
-                <c:when test="${paging.hasNext()}">
-                    <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${paging.number + 1}"/>">
-                        <span>다음</span>
-                    </a>
-                </c:when>
-                <c:otherwise>
-                    <span>다음</span>
-                </c:otherwise>
-            </c:choose>
-        </li>
-    </ul>
+            <li id="previous-button">
+                <c:choose>
+                    <c:when test="${pageUtil.hasPreList}">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${pageUtil.pages.get(0) - 1}"/>">
+                            <span><</span>
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <span><</span>
+                    </c:otherwise>
+                </c:choose>
 
-</div>
+            </li>
+            <c:forEach var="page" items="${pageUtil.pages}">
+                <li>
+                    <c:choose>
+                        <c:when test="${page== paging.number}">
+                            <span class="active">${page + 1}</span>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${page}"/>">
+                                <span>${page + 1}</span>
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                </li>
+            </c:forEach>
+            <li id="next-button">
+                <c:choose>
+                    <c:when test="${pageUtil.hasNextList}">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${pageUtil.pages.get(4) + 1}"/>">
+                            <span>></span>
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <span>></span>
+                    </c:otherwise>
+                </c:choose>
+            </li>
+            <li id="next-button">
+                <c:choose>
+                    <c:when test="${!pageUtil.last}">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${paging.totalPages - 1}"/>">
+                            <span>>></span>
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <span>>></span>
+                    </c:otherwise>
+                </c:choose>
+            </li>
+        </ul>
+
+    </div>
     <p class="total-elements">푼 문제들 수 : ${paging.totalElements}</p>
 </div>
 
@@ -177,7 +178,7 @@
             }
         }
         </c:forEach>
-
+        list.sort();
         updateSelectOptions("language-select-box", list);
     }
 
@@ -203,7 +204,7 @@
             }
         }
         </c:forEach>
-
+        list.sort();
         updateSelectOptions("level-select-box", list);
     }
 
@@ -228,7 +229,7 @@
 
     function getValue(selectId) {
         const sel = document.getElementById(selectId);
-        return text= sel.options[sel.selectedIndex].text;
+        return text = sel.options[sel.selectedIndex].text;
     }
 
 

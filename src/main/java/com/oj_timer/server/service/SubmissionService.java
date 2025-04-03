@@ -4,7 +4,6 @@ import com.oj_timer.server.dto.*;
 import com.oj_timer.server.dto.condition.SubmissionSearchCondition;
 import com.oj_timer.server.dto.domain.ProblemDto;
 import com.oj_timer.server.dto.domain.SubmissionDto;
-import com.oj_timer.server.dto.test.MyBatisSubmissionDto;
 import com.oj_timer.server.entity.Member;
 import com.oj_timer.server.exception_handler.exceptions.BadRequestException;
 import com.oj_timer.server.entity.Problem;
@@ -64,11 +63,6 @@ public class SubmissionService {
     }
 
     public Page<RecentSubmissionDto> getRecentSubmissionsPaging(String email, SubmissionSearchCondition condition, Pageable pageable) {
-        condition.setEmail(email);
-        return submissionQueryRepository.findRecentSubmissionPage(condition, pageable);
-    }
-
-    public Page<MyBatisSubmissionDto> getRecentSubmissionsPagingByMyBatis(String email, SubmissionSearchCondition condition, Pageable pageable) {
         condition.setEmail(email);
         return recentSubmissionRepository.findRecentSubmissions(condition, pageable);
     }

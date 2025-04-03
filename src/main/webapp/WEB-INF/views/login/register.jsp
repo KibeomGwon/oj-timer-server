@@ -151,7 +151,10 @@
 
     const data = { mail : email };
 
-    const response = await fetch("https://oj-timer.site/api/mail", {
+    const baseUrl = 'http://localhost:8080';
+    // const baseUrl = 'https://oj-timer.site';
+
+    const response = await fetch("${baseUrl}/api/mail", {
       method : "post",
       headers : {
         "Content-type" : "application/json"
