@@ -11,7 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 public class CompleteReview extends EntityDate {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "complete_review_id")
     private Long id;
 

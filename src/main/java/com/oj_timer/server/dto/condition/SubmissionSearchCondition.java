@@ -1,9 +1,9 @@
 package com.oj_timer.server.dto.condition;
 
-import com.querydsl.core.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.util.StringUtils;
 
 @Setter
 @Getter
@@ -15,6 +15,9 @@ public class SubmissionSearchCondition {
     private String title;
     private String language;
     private String level;
+    private String rangeUnit;
+    private Integer rangeNumber;
+    private String sortDirection;
 
     public String getSite() {
         if (site != null) {
@@ -25,5 +28,10 @@ public class SubmissionSearchCondition {
             }
         }
         return site;
+    }
+
+    public void setRangeNumber(Integer rangeNumber) {
+        if (rangeNumber != null)
+            this.rangeNumber = -rangeNumber;
     }
 }

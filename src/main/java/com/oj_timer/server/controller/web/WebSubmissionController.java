@@ -32,7 +32,7 @@ public class WebSubmissionController {
         if (email == null) {
             log.info("MEBMERID IS NULL");
         } else {
-            log.info("MEBMERID = {}", email);
+            log.info("MEBMERID = {}, CONDITION = {}", email, condition);
         }
 
         Page<RecentSubmissionDto> page = submissionService.getRecentSubmissionsPaging(email, condition, pageable);

@@ -3,7 +3,6 @@ package com.oj_timer.server.repository.mybatis;
 import com.oj_timer.server.controller.web.paging.PageUtil;
 import com.oj_timer.server.dto.RecentSubmissionDto;
 import com.oj_timer.server.dto.condition.SubmissionSearchCondition;
-import com.oj_timer.server.dto.test.MyBatisSubmissionDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

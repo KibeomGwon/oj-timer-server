@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -44,20 +45,34 @@ public class CreateSubmissionDummy {
         // then
     }
 
+    @Test
+    @DisplayName("랜덤타임 생성")
+    void createRandomTime() {
+        // given
+        LocalDateTime randomTime = randomTime();
+        String formatted = randomTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String pattern = format.toPattern();
+        // when
+        System.out.println(formatted);
+        // then
+    }
+
     List<SubmissionTestDto> getSubmissions() {
         List<SubmissionTestDto> dtos = new ArrayList<>();
 
         for (int i = 1; i <= 100_000; i++) {
             Long randomMemberId = getRandomMemberId(), randomProblemId = getRandomProblemId();
-            LocalDateTime submissionTime = randomTime();
+            String submissionTime = randomTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            String submissionTime2 = randomTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
             SubmissionTestDto dto = SubmissionTestDto.builder()
                     .memberId(randomMemberId)
                     .problemId(randomProblemId)
-                    .elementId(i + randomMemberId + randomProblemId + change(submissionTime))
+                    .elementId(i + randomMemberId + randomProblemId + submissionTime2)
                     .submissionTime(submissionTime)
                     .username("user" + randomMemberId)
-                    .language("자바")
+                    .language(i % 2 == 0 ? "자바" : "MySql")
                     .build();
 
             dtos.add(dto);
@@ -70,7 +85,7 @@ public class CreateSubmissionDummy {
     }
 
     Long getRandomProblemId() {
-        return new Random().nextLong(10000) + 30001;
+        return new Random().nextLong(10000) + 1;
     }
 
     LocalDateTime randomTime() {

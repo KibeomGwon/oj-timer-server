@@ -15,10 +15,11 @@ public class RecentSubmissionDto {
     private Long problemId;
     private String email;
     private LocalDateTime recentSubmissionTime;
-    private String title;
+    private String problemTitleId;
     private String level;
     private String site;
     private String link;
     private String language;
     private String username;
+    private String title;
 }

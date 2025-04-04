@@ -18,7 +18,7 @@ public class CreateMemberDummy {
     @Autowired
     MemberDummyRepository repository;
 
-//    @Test
+    @Test
     @DisplayName("멤버 더미 Insert")
     void createDummy() {
         // given

@@ -34,7 +34,7 @@ public class SubmissionDummyRepository {
                 ps.setLong(1, submission.getMemberId());
                 ps.setLong(2, submission.getProblemId());
                 ps.setString(3, submission.getElementId());
-                ps.setDate(4, java.sql.Date.valueOf(submission.getSubmissionTime().toLocalDate()));
+                ps.setString(4, submission.getSubmissionTime());
                 ps.setString(5, submission.getUsername());
                 ps.setString(6, submission.getLanguage());
             }

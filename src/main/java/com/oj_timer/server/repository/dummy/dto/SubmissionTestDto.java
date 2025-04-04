@@ -16,7 +16,7 @@ public class SubmissionTestDto {
     private Long problemId;
     private Long memberId;
     private String elementId;
-    private LocalDateTime submissionTime;
+    private String submissionTime;
     private String username;
     private String language;
 }

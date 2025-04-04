@@ -22,7 +22,14 @@
             <select name="site" id="site-select-box">
                 <option value="">none</option>
                 <c:forEach var="site" items="${sites}">
-                    <option value="${site}">${site}</option>
+                    <c:choose>
+                        <c:when test="${param.site eq site}">
+                            <option value="${site}" selected>${site}</option>
+                        </c:when>
+                        <c:otherwise>
+                            <option value="${site}">${site}</option>
+                        </c:otherwise>
+                    </c:choose>
                 </c:forEach>
             </select>
         </div>
@@ -40,11 +47,41 @@
                 <option value=""></option>
             </select>
         </div>
+
+        Range :
+        <div class="select-container">
+            <select name="rangeUnit" id="range-unit-select-box">
+                <option value="">none</option>
+                <option value="day">일 (day)</option>
+                <option value="month">달 (month)</option>
+                <option value="year">년 (year)</option>
+            </select>
+        </div>
+        <div class="select-container">
+            <select name="rangeNumber" id="range-number-select-box">
+                <option value=""></option>
+            </select>
+        </div>
+
+        <div class="select-container">
+            <select name="sortDirection" id="sort-select-box">
+                <c:choose>
+                    <c:when test="${param.sortDirection eq 'asc'}">
+                        <option value="desc">최근 순</option>
+                        <option value="asc" selected>오래된 순</option>
+                    </c:when>
+                    <c:otherwise>
+                        <option value="desc" selected>최근 순</option>
+                        <option value="asc">오래된 순</option>
+                    </c:otherwise>
+                </c:choose>
+            </select>
+        </div>
+
         <input type="submit" value="확인">
     </form>
 </div>
 <div>
-
     <table id="submission-table">
         <tr>
             <th>이메일</th>
@@ -60,7 +97,7 @@
                 <td>${submission.email}</td>
                 <td title="${submission.title}"><a href="${submission.link}">${submission.title}</a></td>
                 <td>
-                    <a href="<c:url value='/${submission.title}?username=${submission.username}'/>">${submission.title}</a>
+                    <a href="<c:url value='/${submission.problemTitleId}?username=${submission.username}&title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}'/>">${submission.problemTitleId}</a>
                 </td>
                 <td title="${JstlUtil.siteEnToKr(submission.site)}">${JstlUtil.siteEnToKr(submission.site)}</td>
                 <td>${submission.language}</td>
@@ -74,7 +111,7 @@
             <li id="previous-button">
                 <c:choose>
                     <c:when test="${!pageUtil.first}">
-                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}"/>">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}"/>">
                             <span><<</span>
                         </a>
                     </c:when>
@@ -86,7 +123,7 @@
             <li id="previous-button">
                 <c:choose>
                     <c:when test="${pageUtil.hasPreList}">
-                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${pageUtil.pages.get(0) - 1}"/>">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${pageUtil.pages.get(0) - 1}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}"/>">
                             <span><</span>
                         </a>
                     </c:when>
@@ -103,7 +140,7 @@
                             <span class="active">${page + 1}</span>
                         </c:when>
                         <c:otherwise>
-                            <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${page}"/>">
+                            <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${page}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}"/>">
                                 <span>${page + 1}</span>
                             </a>
                         </c:otherwise>
@@ -113,7 +150,7 @@
             <li id="next-button">
                 <c:choose>
                     <c:when test="${pageUtil.hasNextList}">
-                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${pageUtil.pages.get(4) + 1}"/>">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${pageUtil.pages.get(4) + 1}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}"/>">
                             <span>></span>
                         </a>
                     </c:when>
@@ -125,7 +162,7 @@
             <li id="next-button">
                 <c:choose>
                     <c:when test="${!pageUtil.last}">
-                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${paging.totalPages - 1}"/>">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${paging.totalPages - 1}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}"/>">
                             <span>>></span>
                         </a>
                     </c:when>
@@ -152,9 +189,35 @@
         siteSelect.addEventListener('change', addLanguageSelect);
         let languageSelect = document.getElementById("language-select-box");
         languageSelect.addEventListener('change', addLevelSelect);
+        let leveLSelect = document.getElementById("level-select-box");
+        let rangeUnitSelect = document.getElementById("range-unit-select-box");
+        rangeUnitSelect.addEventListener('change', addRangeNumberSelect);
+        let rangeNumberSelect = document.getElementById("range-number-select-box");
 
         addLanguageSelect();
         addLevelSelect();
+        addRangeNumberSelect();
+    }
+
+    function addRangeNumberSelect() {
+        const value = getValue("range-unit-select-box");
+
+        const list = [];
+
+        if (value.includes('일')) {
+            for (let i = 1; i <= 29; i++) {
+                list.push(i);
+            }
+        } else if (value.includes('달')) {
+            for (let i = 1; i <= 11; i++) {
+                list.push(i);
+            }
+        } else if (value.includes('년')) {
+            for (let i = 1; i <= 5; i++) {
+                list.push(i);
+            }
+        }
+        updateSelectOptions("range-number-select-box", list);
     }
 
     function addLanguageSelect() {
