@@ -37,8 +37,6 @@ public class JwtAccessInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
 
         if (session.getAttribute(SessionConst.LOGIN_MANAGER) != null) {
-            log.info("SESSION [{}]", session.getAttribute(SessionConst.LOGIN_MANAGER));
-            log.info("BE LOGIN");
             return true;
         }
 

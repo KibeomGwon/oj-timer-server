@@ -81,7 +81,7 @@ public class SubmissionService {
     }
 
     public List<SubmissionQueryRepository.SelectObject> getSelectObjects(String email) {
-        return submissionQueryRepository.getSelectObjects(email);
+        return submissionQueryRepository.getSelectObjects(email).getSelectObjects();
     }
 
 

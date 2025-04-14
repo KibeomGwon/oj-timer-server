@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.oj_timer.server.entity.QProblem.*;
@@ -30,7 +31,7 @@ public class SubmissionQueryRepository {
     }
 
     @Cacheable(key = "#email", unless = "#result == null")
-    public List<SelectObject> getSelectObjects(String email) {
+    public SelectObjects getSelectObjects(String email) {
         log.info("SELECTIONS FOR {}", email);
         List<SelectObject> fetch = factory
                 .select(Projections.fields(SelectObject.class,
@@ -44,9 +45,20 @@ public class SubmissionQueryRepository {
                 .where(submission.member.email.eq(email))
                 .groupBy(problem.site, submission.language, problem.level)
                 .fetch();
-        return fetch;
+        return new SelectObjects(fetch);
     }
 
+    @Data
+    public static class SelectObjects {
+        private List<SelectObject> selectObjects = new ArrayList<>();
+
+        public SelectObjects() {
+        }
+
+        public SelectObjects(List<SelectObject> selectObjects) {
+            this.selectObjects = selectObjects;
+        }
+    }
 
     @Data
     public static class SelectObject {
