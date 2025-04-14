@@ -49,7 +49,6 @@
             limit #{offset}, ${limit};
 
     </select>
-
     <select id="recentSubmissionsCount" resultType="long">
         select count(*)
         from (

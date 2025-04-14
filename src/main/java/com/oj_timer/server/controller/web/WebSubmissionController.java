@@ -10,6 +10,7 @@ import com.oj_timer.server.service.SubmissionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,10 +52,11 @@ public class WebSubmissionController {
 
     @GetMapping("/{problemId}")
     public String findOne(@Login String email,
-                          @PathVariable String problemId, @RequestParam String username, Pageable pageable, Model model) {
+                          @PathVariable String problemId, @RequestParam String username, Model model) {
 
         log.info("MEBMERID = {}, PROBLEMID = {}, USERNAME = {}", email, problemId, username);
 
+        Pageable pageable = PageRequest.of(0, 100);
         ProblemAndSubmissionsDto page = submissionService.findSinglePageByProblemTitleIdAndUsername(problemId, username, pageable);
 
         model.addAttribute("submissions", page.getSubmissionDtos().getContent());

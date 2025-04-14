@@ -97,7 +97,7 @@
                 <td>${submission.email}</td>
                 <td title="${submission.title}"><a href="${submission.link}">${submission.title}</a></td>
                 <td>
-                    <a href="<c:url value='/${submission.problemTitleId}?username=${submission.username}&title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}'/>">${submission.problemTitleId}</a>
+                    <a href="<c:url value='/${submission.problemTitleId}?username=${submission.username}&title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}&page=${param.page}'/>">${submission.problemTitleId}</a>
                 </td>
                 <td title="${JstlUtil.siteEnToKr(submission.site)}">${JstlUtil.siteEnToKr(submission.site)}</td>
                 <td>${submission.language}</td>
@@ -111,7 +111,7 @@
             <li id="previous-button">
                 <c:choose>
                     <c:when test="${!pageUtil.first}">
-                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}"/>">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}"/>">
                             <span><<</span>
                         </a>
                     </c:when>
@@ -123,7 +123,7 @@
             <li id="previous-button">
                 <c:choose>
                     <c:when test="${pageUtil.hasPreList}">
-                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${pageUtil.pages.get(0) - 1}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}"/>">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${pageUtil.pages.get(0) - 1}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}"/>">
                             <span><</span>
                         </a>
                     </c:when>
@@ -140,7 +140,7 @@
                             <span class="active">${page + 1}</span>
                         </c:when>
                         <c:otherwise>
-                            <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${page}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}"/>">
+                            <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${page}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}"/>">
                                 <span>${page + 1}</span>
                             </a>
                         </c:otherwise>
@@ -150,7 +150,7 @@
             <li id="next-button">
                 <c:choose>
                     <c:when test="${pageUtil.hasNextList}">
-                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${pageUtil.pages.get(4) + 1}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}"/>">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${pageUtil.pages.get(4) + 1}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}"/>">
                             <span>></span>
                         </a>
                     </c:when>
@@ -162,7 +162,7 @@
             <li id="next-button">
                 <c:choose>
                     <c:when test="${!pageUtil.last}">
-                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${paging.totalPages - 1}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}"/>">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${paging.totalPages - 1}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}"/>">
                             <span>>></span>
                         </a>
                     </c:when>

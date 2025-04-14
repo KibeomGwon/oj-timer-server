@@ -81,6 +81,6 @@
     </table>
   </div>
 
-  <button id="back-button" onclick="location.href='<c:url value='/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}'/>'"> 뒤로가기 </button>
+  <button id="back-button" onclick="location.href='<c:url value='/?title=${param.title}&page=${param.page}&site=${param.site}&language=${param.language}&level=${param.level}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}'/>'"> 뒤로가기 </button>
 </body>
 </html>

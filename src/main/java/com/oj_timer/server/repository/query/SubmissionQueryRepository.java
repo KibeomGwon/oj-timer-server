@@ -4,7 +4,11 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,6 +17,8 @@ import static com.oj_timer.server.entity.QProblem.*;
 import static com.oj_timer.server.entity.QSubmission.*;
 
 @Repository
+@Slf4j
+@CacheConfig(cacheNames = "selections")
 public class SubmissionQueryRepository {
     private final EntityManager em;
     private final JPAQueryFactory factory;
@@ -23,7 +29,9 @@ public class SubmissionQueryRepository {
         this.factory = new JPAQueryFactory(em);
     }
 
+    @Cacheable(key = "#email", unless = "#result == null")
     public List<SelectObject> getSelectObjects(String email) {
+        log.info("SELECTIONS FOR {}", email);
         List<SelectObject> fetch = factory
                 .select(Projections.fields(SelectObject.class,
                         problem.site.as("site"),

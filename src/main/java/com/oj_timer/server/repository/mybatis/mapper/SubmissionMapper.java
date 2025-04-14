@@ -10,6 +10,5 @@ import java.util.List;
 @Mapper
 public interface SubmissionMapper {
     List<RecentSubmissionDto> findRecentSubmissions(@Param("condition") SubmissionSearchCondition condition, @Param("offset") long offset, @Param("limit") long limit);
-
     long recentSubmissionsCount(@Param("condition") SubmissionSearchCondition condition);
 }

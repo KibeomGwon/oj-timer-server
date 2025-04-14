@@ -17,6 +17,7 @@ import com.oj_timer.server.repository.query.SubmissionQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +67,7 @@ public class SubmissionService {
         condition.setEmail(email);
         return recentSubmissionRepository.findRecentSubmissions(condition, pageable);
     }
+
 
     public ProblemAndSubmissionsDto findSinglePageByProblemTitleIdAndUsername(String problemTitleId, String username, Pageable pageable) {
         Problem problem = problemRepository
