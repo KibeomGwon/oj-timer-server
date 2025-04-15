@@ -39,7 +39,6 @@ public class SubmissionService {
     public SubmissionDto save(String email, InputSubmissionDto dto) throws BadRequestException {
         Problem problem = dto.toProblem();
 
-        findOrCreateProblem(problem);
         if (!isExistsProblem(problem.getProblemTitleId())) {
             problemRepository.save(problem);
         } else {
