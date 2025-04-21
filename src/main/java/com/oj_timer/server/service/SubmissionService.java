@@ -39,12 +39,7 @@ public class SubmissionService {
     public SubmissionDto save(String email, InputSubmissionDto dto) throws BadRequestException {
         Problem problem = dto.toProblem();
 
-        if (!isExistsProblem(problem.getProblemTitleId())) {
-            problemRepository.save(problem);
-        } else {
-            problem = problemRepository.findProblemByProblemTitleId(problem.getProblemTitleId())
-                    .orElseThrow(() -> new BadRequestException("문제 정보를 찾지 못했습니다."));
-        }
+        problem = findOrCreateProblem(problem);
 
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("유저를 찾지 못했습니다."));
 
@@ -58,7 +53,7 @@ public class SubmissionService {
         return SubmissionDto.toDto(savedSubmission);
     }
 
-    public void isExistsSubmissionByElementId(String email, String elementId, String username, String site) throws NotFoundException {
+    public void existsSubmissionByElementId(String email, String elementId, String username, String site) throws NotFoundException {
         submissionRepository.findByElementIdAndUsernameAndSite(elementId, username, site, email)
                 .orElseThrow(() -> new NotFoundException("제출을 찾지 못했습니다 : " + elementId));
     }
@@ -85,11 +80,9 @@ public class SubmissionService {
     }
 
 
-
     // === private method === //
-
-    private boolean isExistsProblem(String problemTitle) {
-        return problemRepository.findProblemByProblemTitleId(problemTitle).isPresent();
+    private Problem findOrCreateProblem(Problem problem) {
+        return problemRepository.findProblemByProblemTitleId(problem.getProblemTitleId())
+                .orElseGet(() -> problemRepository.save(problem));
     }
-
 }

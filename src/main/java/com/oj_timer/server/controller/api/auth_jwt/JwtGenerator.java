@@ -49,6 +49,4 @@ public class JwtGenerator {
                 .refreshToken(refreshToken)
                 .build();
     }
-
-
 }
