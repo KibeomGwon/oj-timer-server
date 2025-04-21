@@ -43,5 +43,4 @@ public class CompleteReview extends EntityDate {
     public static CompleteReview create() {
         return new CompleteReview();
     }
-
 }

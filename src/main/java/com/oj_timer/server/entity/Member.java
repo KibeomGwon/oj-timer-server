@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 public class Member extends EntityDate {
+
     @Id
     @GeneratedValue
     @Column(name = "member_id")
@@ -60,5 +61,7 @@ public class Member extends EntityDate {
         return new Member(email, password, phone);
     }
 
-
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

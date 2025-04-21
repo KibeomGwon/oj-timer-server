@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page import="com.oj_timer.server.utils.JstlUtil" %>
 
 <!DOCTYPE html>
@@ -18,36 +19,72 @@
         제목 : <input type="text" name="title" value="${param.title}">
         site :
         <div class="select-container">
-        <select name="site" id="site-select-box">
-            <option value="">none</option>
-        <c:forEach var="site" items="${sites}">
-            <option value="${site}">${site}</option>
-        </c:forEach>
-        </select>
+            <select name="site" id="site-select-box">
+                <option value="">none</option>
+                <c:forEach var="site" items="${sites}">
+                    <c:choose>
+                        <c:when test="${param.site eq site}">
+                            <option value="${site}" selected>${site}</option>
+                        </c:when>
+                        <c:otherwise>
+                            <option value="${site}">${site}</option>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+            </select>
         </div>
 
         language :
         <div class="select-container">
-        <select name="language" id="language-select-box">
-            <option value=""></option>
-        </select>
+            <select name="language" id="language-select-box">
+                <option value=""></option>
+            </select>
         </div>
 
         level :
         <div class="select-container">
-        <select name="level"  id="level-select-box">
-            <option value=""></option>
-        </select>
+            <select name="level" id="level-select-box">
+                <option value=""></option>
+            </select>
         </div>
+
+        Range :
+        <div class="select-container">
+            <select name="rangeUnit" id="range-unit-select-box">
+                <option value="">none</option>
+                <option value="day">일 (day)</option>
+                <option value="month">달 (month)</option>
+                <option value="year">년 (year)</option>
+            </select>
+        </div>
+        <div class="select-container">
+            <select name="rangeNumber" id="range-number-select-box">
+                <option value=""></option>
+            </select>
+        </div>
+
+        <div class="select-container">
+            <select name="sortDirection" id="sort-select-box">
+                <c:choose>
+                    <c:when test="${param.sortDirection eq 'asc'}">
+                        <option value="desc">최근 순</option>
+                        <option value="asc" selected>오래된 순</option>
+                    </c:when>
+                    <c:otherwise>
+                        <option value="desc" selected>최근 순</option>
+                        <option value="asc">오래된 순</option>
+                    </c:otherwise>
+                </c:choose>
+            </select>
+        </div>
+
         <input type="submit" value="확인">
     </form>
 </div>
-
 <div>
     <table id="submission-table">
         <tr>
             <th>이메일</th>
-            <th>제출 번호</th>
             <th>제목</th>
             <th>문제 아이디</th>
             <th>사이트</th>
@@ -58,10 +95,9 @@
         <c:forEach var="submission" items="${paging.content}" varStatus="st">
             <tr>
                 <td>${submission.email}</td>
-                <td title="${submission.elementId}">${submission.elementId}</td>
                 <td title="${submission.title}"><a href="${submission.link}">${submission.title}</a></td>
                 <td>
-                    <a href="<c:url value='/${submission.problemId}?username=${submission.username}'/>">${submission.problemId}</a>
+                    <a href="<c:url value='/${submission.problemTitleId}?username=${submission.username}&title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}&page=${param.page}'/>">${submission.problemTitleId}</a>
                 </td>
                 <td title="${JstlUtil.siteEnToKr(submission.site)}">${JstlUtil.siteEnToKr(submission.site)}</td>
                 <td>${submission.language}</td>
@@ -70,55 +106,74 @@
             </tr>
         </c:forEach>
     </table>
-<div>
-    <ul id="page-index">
-        <li id="previous-button">
-            <c:choose>
-                <c:when test="${paging.hasPrevious()}">
-                    <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${paging.number - 1}"/>">
-                        <span>이전</span>
-                    </a>
-                </c:when>
-                <c:otherwise>
-                    <span>이전</span>
-                </c:otherwise>
-            </c:choose>
-        <c:if test="${paging.totalPages == 0}">
-            <c:set var="totalPage" value="0"></c:set>
-        </c:if>
-        <c:if test="${paging.totalPages > 0}">
-            <c:set var="totalPage" value="${paging.totalPages - 1}"></c:set>
-        </c:if>
-        </li>
-        <c:forEach var="number" begin="0" end="${totalPage}" step="1">
-            <li>
+    <div>
+        <ul id="page-index">
+            <li id="previous-button">
                 <c:choose>
-                    <c:when test="${number == paging.number}">
-                        <span class="active">${number + 1}</span>
+                    <c:when test="${!pageUtil.first}">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}"/>">
+                            <span><<</span>
+                        </a>
                     </c:when>
                     <c:otherwise>
-                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${number}"/>">
-                            <span>${number+1}</span>
-                        </a>
+                        <span><<</span>
                     </c:otherwise>
                 </c:choose>
             </li>
-        </c:forEach>
-        <li id="next-button">
-            <c:choose>
-                <c:when test="${paging.hasNext()}">
-                    <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${paging.number + 1}"/>">
-                        <span>다음</span>
-                    </a>
-                </c:when>
-                <c:otherwise>
-                    <span>다음</span>
-                </c:otherwise>
-            </c:choose>
-        </li>
-    </ul>
+            <li id="previous-button">
+                <c:choose>
+                    <c:when test="${pageUtil.hasPreList}">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${pageUtil.pages.get(0) - 1}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}"/>">
+                            <span><</span>
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <span><</span>
+                    </c:otherwise>
+                </c:choose>
 
-</div>
+            </li>
+            <c:forEach var="page" items="${pageUtil.pages}">
+                <li>
+                    <c:choose>
+                        <c:when test="${page== paging.number}">
+                            <span class="active">${page + 1}</span>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${page}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}"/>">
+                                <span>${page + 1}</span>
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                </li>
+            </c:forEach>
+            <li id="next-button">
+                <c:choose>
+                    <c:when test="${pageUtil.hasNextList}">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${pageUtil.pages.get(4) + 1}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}"/>">
+                            <span>></span>
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <span>></span>
+                    </c:otherwise>
+                </c:choose>
+            </li>
+            <li id="next-button">
+                <c:choose>
+                    <c:when test="${!pageUtil.last}">
+                        <a href="<c:url value="/?title=${param.title}&site=${param.site}&language=${param.language}&level=${param.level}&page=${paging.totalPages - 1}&rangeUnit=${param.rangeUnit}&rangeNumber=${param.rangeNumber}&sortDirection=${param.sortDirection}"/>">
+                            <span>>></span>
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <span>>></span>
+                    </c:otherwise>
+                </c:choose>
+            </li>
+        </ul>
+
+    </div>
     <p class="total-elements">푼 문제들 수 : ${paging.totalElements}</p>
 </div>
 
@@ -134,9 +189,35 @@
         siteSelect.addEventListener('change', addLanguageSelect);
         let languageSelect = document.getElementById("language-select-box");
         languageSelect.addEventListener('change', addLevelSelect);
+        let leveLSelect = document.getElementById("level-select-box");
+        let rangeUnitSelect = document.getElementById("range-unit-select-box");
+        rangeUnitSelect.addEventListener('change', addRangeNumberSelect);
+        let rangeNumberSelect = document.getElementById("range-number-select-box");
 
         addLanguageSelect();
         addLevelSelect();
+        addRangeNumberSelect();
+    }
+
+    function addRangeNumberSelect() {
+        const value = getValue("range-unit-select-box");
+
+        const list = [];
+
+        if (value.includes('일')) {
+            for (let i = 1; i <= 29; i++) {
+                list.push(i);
+            }
+        } else if (value.includes('달')) {
+            for (let i = 1; i <= 11; i++) {
+                list.push(i);
+            }
+        } else if (value.includes('년')) {
+            for (let i = 1; i <= 5; i++) {
+                list.push(i);
+            }
+        }
+        updateSelectOptions("range-number-select-box", list);
     }
 
     function addLanguageSelect() {
@@ -160,7 +241,7 @@
             }
         }
         </c:forEach>
-
+        list.sort();
         updateSelectOptions("language-select-box", list);
     }
 
@@ -186,7 +267,7 @@
             }
         }
         </c:forEach>
-
+        list.sort();
         updateSelectOptions("level-select-box", list);
     }
 
@@ -211,7 +292,7 @@
 
     function getValue(selectId) {
         const sel = document.getElementById(selectId);
-        return text= sel.options[sel.selectedIndex].text;
+        return text = sel.options[sel.selectedIndex].text;
     }
 
 

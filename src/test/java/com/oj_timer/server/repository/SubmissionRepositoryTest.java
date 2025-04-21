@@ -1,13 +1,12 @@
 package com.oj_timer.server.repository;
 
-import com.oj_timer.server.AppConfig;
+import com.oj_timer.server.config.AppConfig;
 import com.oj_timer.server.dto.domain.SubmissionDto;
 import com.oj_timer.server.entity.Problem;
 import com.oj_timer.server.entity.Submission;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;

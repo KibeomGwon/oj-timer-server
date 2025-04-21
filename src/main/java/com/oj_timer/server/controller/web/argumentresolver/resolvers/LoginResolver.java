@@ -29,7 +29,6 @@ public class LoginResolver implements HandlerMethodArgumentResolver {
         boolean hasParameterAnnotation = parameter.hasParameterAnnotation(Login.class);
         boolean assignableFrom = String.class.isAssignableFrom(parameter.getParameterType());
 
-
         return hasParameterAnnotation && assignableFrom;  // 리턴 값이 true 면 resolveArgument() 실행
     }
 
@@ -41,7 +40,6 @@ public class LoginResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         HttpSession session = request.getSession(false);
 
-
         String token = jwtResolver.getTokenFromRequest(request);
 
         // session 만 필요할 때 session 만 받는 일이 있고, token 만 필요할 때 token 만 받는 일도 있다.
@@ -50,9 +48,8 @@ public class LoginResolver implements HandlerMethodArgumentResolver {
 
         String email = null;
 
-        if (jwtResolver.validation(token)) {
+        if (jwtResolver.validation(token))
             email = jwtResolver.parseJwt(token);
-        }
 
         log.info("resolveArgument {}", email != null ? email : session.getAttribute(SessionConst.LOGIN_MANAGER));
 

@@ -25,7 +25,7 @@ public class JwtAccessInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // preflight로 인한 에러를 막기위한 로직
+        // preflight 로 인한 에러를 막기위한 로직
         if (request.getMethod().equals("OPTIONS")) {
             return true;
         }
@@ -37,8 +37,6 @@ public class JwtAccessInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
 
         if (session.getAttribute(SessionConst.LOGIN_MANAGER) != null) {
-            log.info("SESSION [{}]", session.getAttribute(SessionConst.LOGIN_MANAGER));
-            log.info("BE LOGIN");
             return true;
         }
 

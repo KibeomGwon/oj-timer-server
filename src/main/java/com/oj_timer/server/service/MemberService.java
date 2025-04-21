@@ -6,9 +6,11 @@ import com.oj_timer.server.exception_handler.exceptions.NotFoundException;
 import com.oj_timer.server.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
 

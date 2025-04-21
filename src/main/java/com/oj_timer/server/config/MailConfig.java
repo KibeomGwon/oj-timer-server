@@ -1,4 +1,4 @@
-package com.oj_timer.server;
+package com.oj_timer.server.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

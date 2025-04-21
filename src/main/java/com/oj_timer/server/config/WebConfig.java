@@ -1,4 +1,4 @@
-package com.oj_timer.server;
+package com.oj_timer.server.config;
 
 import com.oj_timer.server.controller.api.auth_jwt.JwtAccessInterceptor;
 import com.oj_timer.server.controller.web.argumentresolver.resolvers.LoginResolver;
@@ -29,7 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("*") // “*“같은 와일드카드를 사용
+                .allowedOriginPatterns("http://localhost:8080", "https://www.acmicpc.net", "https://programmers.co.kr/") // “*“같은 와일드카드를 사용
                 .allowedMethods("GET", "POST")// 허용할 HTTP method
                 .allowedHeaders("*")
                 .allowCredentials(true); // 쿠키 인증 요청 허용

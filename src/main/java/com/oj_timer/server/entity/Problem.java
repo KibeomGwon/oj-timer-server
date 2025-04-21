@@ -3,6 +3,7 @@ package com.oj_timer.server.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.List;
 @Table(name = "problem")
 @NoArgsConstructor
 @Getter
+@ToString(exclude = {"submissions", "completeReviews"})
 public class Problem extends EntityDate {
     @Id
     @GeneratedValue
@@ -49,5 +51,13 @@ public class Problem extends EntityDate {
     // === ddd === //
     public static Problem create(String problemTitleId, String level, String site, String link, String title) {
          return new Problem(problemTitleId, level, site, link, title);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setProblemTitleId(String problemTitleId) {
+        this.problemTitleId = problemTitleId;
     }
 }

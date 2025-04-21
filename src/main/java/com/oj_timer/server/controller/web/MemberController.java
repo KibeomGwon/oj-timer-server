@@ -64,7 +64,7 @@ public class MemberController {
     }
 
     @GetMapping("/register")
-    public String registerForm(@ModelAttribute RegisterForm resigterForm) {
+    public String registerForm(@ModelAttribute RegisterForm registerForm) {
         return "login/register";
     }
 
@@ -86,6 +86,7 @@ public class MemberController {
         if (session != null) {
             session.invalidate();
         }
+
         refreshTokenRepository.deleteByEmail(email);
 
         return "redirect:/";
