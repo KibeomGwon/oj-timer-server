@@ -16,7 +16,7 @@ import java.util.List;
 @ToString(exclude = {"submissions", "completeReviews"})
 public class Problem extends EntityDate {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "problem_id")
     private Long id;
     @Column(name = "problem_title_id")
