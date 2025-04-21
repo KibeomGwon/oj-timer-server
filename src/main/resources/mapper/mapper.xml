@@ -11,7 +11,7 @@
                 join problem p on s.problem_id = p.problem_id
                 where email = #{condition.email}
                 <if test="condition.title != null and condition.title != ''">
-                    title like concat('%',#{condition.title},'%')
+                    and title like concat('%', #{condition.title}, '%')
                 </if>
                 <if test="condition.site != null and condition.site != ''">
                     and site like #{condition.site}
