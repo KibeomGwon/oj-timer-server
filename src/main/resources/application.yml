@@ -61,6 +61,10 @@ server:
     session:
       tracking-modes: cookie
       timeout: 1800
+#  tomcat:
+#    threads:
+#      max: 200
+#    accept-count: 100
 
 logging:
   level:
