@@ -67,6 +67,4 @@ public class PageUtil {
     public void setIsLast() {
         isLast = page.isLast();
     }
-
-
 }
